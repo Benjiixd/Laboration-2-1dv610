@@ -1,6 +1,8 @@
 /**
  *
  */
+import { ImageModel } from '../models/imageModel.js'
+
 class imageController {
   /**
    *
@@ -8,28 +10,33 @@ class imageController {
    * @param model
    */
   constructor (model) {
-    this.model = model
+    this.Model2 = model
   }
 
   /**
    *
    * @param image
    */
-  async saveImage (image) {
-    if (!image) {
+  async saveImage (file, model) {
+    if (!file) {
       throw new Error('No image provided')
     }
-    if (!image.mimetype) {
+    if (!file.mimetype) {
         throw new Error('No mimetype provided')
         }
 
-    const newImage = {
-        filename: image.originalName,
-        mimetype: image.mimetype,
-        size: image.size,
+    console.log("file", file)
+
+    const newImage = new model({
+        filename: file.originalname,
+        mimetype: file.mimetype,
+        size: file.size,
         uploadedAt: new Date()
-    }
-    const saved = await this.model.save(newImage)
+    })
+
+    console.log("newImage", newImage)
+
+    const saved = await newImage.save()
     return saved
   }
 
