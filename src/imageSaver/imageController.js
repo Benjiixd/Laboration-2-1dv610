@@ -2,6 +2,8 @@
  *
  */
 import { ImageModel } from '../models/imageModel.js'
+import mongoose from 'mongoose'
+import fs from 'fs'
 
 class imageController {
   /**
@@ -21,9 +23,6 @@ class imageController {
     if (!file) {
       throw new Error('No image provided')
     }
-    if (!file.mimetype) {
-        throw new Error('No mimetype provided')
-        }
 
     console.log("file", file)
 
@@ -37,6 +36,24 @@ class imageController {
     console.log("newImage", newImage)
 
     const saved = await newImage.save()
+
+
+    const uploadStream = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+        bucketName: 'images'
+      }).openUploadStreamWithId(newImage._id, file.originalname, {
+        contentType: file.mimetype
+      })
+
+      const fileStream = fs.createReadStream(file.path)
+      fileStream.pipe(uploadStream)
+        .on('error', function (error) {
+          console.error('Error uploading to GridFS:', error)
+        })
+        .on('finish', async function () {
+          console.log('File uploaded to GridFS with id:', newImage._id)
+          newImage.fileId = newImage._id.toString()
+          await newImage.save()
+        })
     return saved
   }
 
