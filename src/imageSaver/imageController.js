@@ -12,6 +12,10 @@ class imageController {
     this.imageSaver.saveImage(image);
   }
 
+    getImage() {
+        return this.imageSaver.getImage();
+    }
+
 
 
 
