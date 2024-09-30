@@ -1,3 +1,6 @@
+import { ImageModel } from '../models/imageModel.js'
+import { imageController } from '../imageSaver/imageController.js'
+
 /**
  * Controller class for the server.
  */
@@ -11,9 +14,13 @@ export class Controller {
   async post (req, res) {
     try {
       console.log(`Received data: ${JSON.stringify(req.body)}`)
-      const { name } = req.body
-      console.log('Hello world and hello ' + name)
-      res.send('Hello world and hello ' + name)
+      const { image } = req.body
+      const imageModel = new ImageModel()
+      const saver = new imageController(imageModel)
+      await saver.saveImage(image)
+
+      
+
     } catch (err) {
       console.error(err)
     }

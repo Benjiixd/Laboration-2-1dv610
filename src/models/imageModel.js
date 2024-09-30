@@ -26,10 +26,6 @@ const schema = new mongoose.Schema({
   uploadedAt: {
     type: Date,
     required: true
-  },
-  jsonDescription: {
-    type: Object,
-    required: true
   }
 })
 

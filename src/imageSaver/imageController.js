@@ -1,22 +1,31 @@
-
-
-
-
-
+/**
+ *
+ */
 class imageController {
-  constructor() {
-    this.model = new imageModel();
+  /**
+   *
+   * @param dbString
+   * @param model
+   */
+  constructor (model) {
+    this.model = model
   }
 
-  saveImage(image) {
-    this.imageSaver.saveImage(image);
+  /**
+   *
+   * @param image
+   */
+  async saveImage (image) {
+    await this.model.save(image)
+    return "Image saved"
   }
 
-    getImage() {
-        return this.imageSaver.getImage();
-    }
-
-
-
-
+  /**
+   *
+   */
+  getImage () {
+    return this.imageSaver.getImage()
+  }
 }
+
+export { imageController }
