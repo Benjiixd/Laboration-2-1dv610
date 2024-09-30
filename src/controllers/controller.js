@@ -14,7 +14,7 @@ export class Controller {
   async post (req, res) {
     try {
       console.log(`Received data: ${JSON.stringify(req.body)}`)
-      const { image } = req.body
+      const { image } = req.image
       const imageModel = new ImageModel()
       const saver = new imageController(imageModel)
       await saver.saveImage(image)
