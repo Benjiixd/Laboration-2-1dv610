@@ -1,7 +1,7 @@
 {
-  "name": "database-server",
+  "name": "image-database-saver",
   "version": "1.0.0",
-  "description": "the database server",
+  "description": "a server to save images to a database",
   "type": "module",
   "main": "src/server.js",
   "engines": {

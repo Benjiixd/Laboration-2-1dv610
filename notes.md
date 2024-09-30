@@ -1,0 +1,1 @@
+when saving image, it needs a mongoDB model to save to, a file, and some more stuff
