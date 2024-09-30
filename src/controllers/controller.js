@@ -14,10 +14,11 @@ export class Controller {
   async post (req, res) {
     try {
       console.log(`Received data: ${JSON.stringify(req.body)}`)
-      const { image } = req.image
+      const file = req.file
+      console.log(`Received image: ${JSON.stringify(file)}`)
       const imageModel = new ImageModel()
       const saver = new imageController(imageModel)
-      await saver.saveImage(image)
+      await saver.saveImage(file)
 
       
 
