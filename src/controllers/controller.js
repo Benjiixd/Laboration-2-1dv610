@@ -1,6 +1,6 @@
 import { ImageModel } from '../models/imageModel.js'
 import { imageController } from '../imageSaver/imageController.js'
-
+import express from 'express'
 /**
  * Controller class for the server.
  */
@@ -19,8 +19,11 @@ export class Controller {
       const imageModel = new ImageModel()
       const saver = new imageController(ImageModel)
       await saver.saveImage(file, ImageModel)
-      const data = await saver.getImage("66fba7663485c166ddca1855", ImageModel)
+      const data = await saver.getImage("66fbe1a08093e3d13982bd30", ImageModel)
       console.log('data in req:', data)
+      res.setHeader('Content-Type', data.metadata.mimetype)
+      res.setHeader('metadata', JSON.stringify(data.metadata))
+
       data.image.pipe(res)
 
       

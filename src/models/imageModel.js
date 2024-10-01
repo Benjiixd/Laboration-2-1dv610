@@ -26,7 +26,13 @@ const schema = new mongoose.Schema({
   uploadedAt: {
     type: Date,
     required: true
+  },
+  updatedAt: {
+    type: Date,
+    required: true
   }
+
+
 })
 
 schema.add(BASE_SCHEMA)

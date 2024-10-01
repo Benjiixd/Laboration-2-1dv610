@@ -56,7 +56,8 @@ class imageController {
       filename: file.originalname,
       mimetype: file.mimetype,
       size: file.size,
-      uploadedAt: new Date()
+      uploadedAt: new Date(),
+      updatedAt: new Date()
     })
 
     console.log('newImage', newImage)
@@ -78,7 +79,17 @@ class imageController {
         console.log('File uploaded to GridFS with id:', newImage._id.toString())
         newImage.fileId = newImage._id.toString()
         await newImage.save()
+        fs.unlink(newImage.path, (err) => {
+            if (err) {
+              console.error('Error deleting local file:', err)
+            } else {
+              console.log('Local file deleted:', file.path)
+            }
+          })
       })
+
+
+      
     return saved
   }
 
@@ -125,6 +136,8 @@ class imageController {
       }
 
       console.log('data:', data)
+
+      
       return data
     } else {
       console.log('Image not found')
