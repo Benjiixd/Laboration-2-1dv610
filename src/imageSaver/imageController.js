@@ -25,7 +25,7 @@ class imageController {
    * @param file
    * @param model
    */
-  async saveImage (file, model) {
+  async saveImage (file) {
     if (!file) {
       throw new Error('No image provided')
     }
@@ -67,7 +67,7 @@ class imageController {
    * @param fileId
    * @param model
    */
-  getImage (fileId, model) {
+  getImage (fileId) {
     if (!fileId) {
       throw new Error('No image provided')
     }
