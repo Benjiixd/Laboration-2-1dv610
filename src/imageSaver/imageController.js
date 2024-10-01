@@ -87,7 +87,7 @@ class imageController {
    * @param fileId
    * @param model
    */
-  getImage (fileId) {
+  async getImage (fileId) {
     if (!fileId) {
       throw new Error('No image provided')
     }
@@ -103,7 +103,37 @@ class imageController {
 
     const downloadStream = bucket.openDownloadStream(new ObjectId(fileId))
 
-    return downloadStream
+    await this.Model.findOne({ fileId })
+      .then((image) => {
+        if (image) {
+          const metadata = {
+            filename: image.filename,
+            mimetype: image.mimetype,
+            size: image.size,
+            uploadedAt: image.uploadedAt,
+            id: image._id,
+            createdAt: image.createdAt,
+            updatedAt: image.updatedAt,
+            __v: image.__v
+          }
+
+          console.log('Image found:', metadata)
+
+          const data = {
+            image: downloadStream,
+            metadata
+          }
+
+          console.log('data:', data)
+          return data
+        } else {
+          console.log('Image not found')
+          return null
+        }
+      })
+      .catch((err) => {
+        console.error('Error finding image:', err)
+      })
   }
 }
 

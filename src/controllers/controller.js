@@ -19,8 +19,9 @@ export class Controller {
       const imageModel = new ImageModel()
       const saver = new imageController(ImageModel)
       await saver.saveImage(file, ImageModel)
-      const image = await saver.getImage("66fba7663485c166ddca1855", ImageModel)
-      image.pipe(res)
+      const data = await saver.getImage("66fba7663485c166ddca1855", ImageModel)
+      console.log('data in req:', data)
+      data.pipe(res)
 
       
 

@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
     minlength: 1
   },
   fileId: {
-    type: String, // Change this to String instead of ObjectId
+    type: String,
     required: false
   },
   mimetype: {
