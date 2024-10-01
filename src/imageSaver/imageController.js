@@ -82,16 +82,14 @@ class imageController {
         newImage.fileId = newImage._id.toString()
         await newImage.save()
         fs.unlink(file.path, (err) => {
-            if (err) {
-              console.error('Error deleting local file:', err)
-            } else {
-              console.log('Local file deleted:', file.path)
-            }
-          })
+          if (err) {
+            console.error('Error deleting local file:', err)
+          } else {
+            console.log('Local file deleted:', file.path)
+          }
+        })
       })
 
-
-      
     return saved
   }
 
@@ -134,12 +132,11 @@ class imageController {
 
       const data = {
         image: downloadStream,
-        metadata: metadata
+        metadata
       }
 
       console.log('data:', data)
 
-      
       return data
     } else {
       console.log('Image not found')
@@ -147,6 +144,56 @@ class imageController {
     }
 
     return null
+  }
+
+  /**
+   *
+   * @param fileId
+   * @param file
+   */
+  async updateImage (fileId, file) {
+    if (!fileId || !file) {
+      throw new Error('No image or file ID provided')
+    }
+    const existingImage = await this.Model.findOne({ fileId: fileId.toString() })
+    if (!existingImage) {
+      throw new Error('Image not found')
+    }
+    const bucket = new GridFSBucket(mongoose.connection.db, {
+      bucketName: 'images'
+    })
+    bucket.delete(new ObjectId(fileId), (error) => {
+      if (error) {
+        console.error('Error deleting old image from gridfs:', error)
+        throw new Error('Failed to delete old image')
+      }
+      console.log('Old image deleted from gridfs:', fileId)
+    })
+    const uploadStream = bucket.openUploadStreamWithId(existingImage._id, file.originalname, {
+      contentType: file.mimetype
+    })
+
+    const fileStream = fs.createReadStream(file.path)
+    fileStream.pipe(uploadStream)
+      .on('error', (error) => {
+        console.error('Error uploading new image to gridfs:', error)
+      })
+      .on('finish', async () => {
+        console.log('New image uploaded to GridFS with id:', existingImage._id.toString())
+        existingImage.filename = file.originalname
+        existingImage.mimetype = file.mimetype
+        existingImage.size = file.size
+        existingImage.updatedAt = new Date()
+        await existingImage.save()
+        fs.unlink(file.path, (err) => {
+          if (err) {
+            console.error('Error deleting local file:', err)
+          } else {
+            console.log('Local file deleted:', file.path)
+          }
+        })
+      })
+    return existingImage
   }
 }
 
