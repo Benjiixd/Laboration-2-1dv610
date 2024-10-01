@@ -70,6 +70,8 @@ class imageController {
       contentType: file.mimetype
     })
 
+    console.log('newImage' + newImage)
+
     const fileStream = fs.createReadStream(file.path)
     fileStream.pipe(uploadStream)
       .on('error', function (error) {
@@ -79,7 +81,7 @@ class imageController {
         console.log('File uploaded to GridFS with id:', newImage._id.toString())
         newImage.fileId = newImage._id.toString()
         await newImage.save()
-        fs.unlink(newImage.path, (err) => {
+        fs.unlink(file.path, (err) => {
             if (err) {
               console.error('Error deleting local file:', err)
             } else {
