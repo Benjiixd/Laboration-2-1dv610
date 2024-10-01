@@ -103,37 +103,35 @@ class imageController {
 
     const downloadStream = bucket.openDownloadStream(new ObjectId(fileId))
 
-    await this.Model.findOne({ fileId })
-      .then((image) => {
-        if (image) {
-          const metadata = {
-            filename: image.filename,
-            mimetype: image.mimetype,
-            size: image.size,
-            uploadedAt: image.uploadedAt,
-            id: image._id,
-            createdAt: image.createdAt,
-            updatedAt: image.updatedAt,
-            __v: image.__v
-          }
+    const image2 = await this.Model.findOne({ fileId })
 
-          console.log('Image found:', metadata)
+    if (image2) {
+      const metadata = {
+        filename: image2.filename,
+        mimetype: image2.mimetype,
+        size: image2.size,
+        uploadedAt: image2.uploadedAt,
+        id: image2._id,
+        createdAt: image2.createdAt,
+        updatedAt: image2.updatedAt,
+        __v: image2.__v
+      }
 
-          const data = {
-            image: downloadStream,
-            metadata
-          }
+      console.log('Image found:', metadata)
 
-          console.log('data:', data)
-          return data
-        } else {
-          console.log('Image not found')
-          return null
-        }
-      })
-      .catch((err) => {
-        console.error('Error finding image:', err)
-      })
+      const data = {
+        image: downloadStream,
+        metadata: metadata
+      }
+
+      console.log('data:', data)
+      return data
+    } else {
+      console.log('Image not found')
+      return null
+    }
+
+    return null
   }
 }
 

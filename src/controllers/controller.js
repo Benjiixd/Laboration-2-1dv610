@@ -21,7 +21,7 @@ export class Controller {
       await saver.saveImage(file, ImageModel)
       const data = await saver.getImage("66fba7663485c166ddca1855", ImageModel)
       console.log('data in req:', data)
-      data.pipe(res)
+      data.image.pipe(res)
 
       
 
