@@ -83,7 +83,7 @@ class imageController {
         await newImage.save()
         fs.unlink(file.path, (err) => {
           if (err) {
-            console.error('Error deleting local file:', err)
+            console.log('Error deleting local file:', err)
           } else {
             console.log('Local file deleted:', file.path)
           }
