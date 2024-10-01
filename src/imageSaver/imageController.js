@@ -4,6 +4,7 @@
 import { ImageModel } from '../models/imageModel.js'
 import mongoose from 'mongoose'
 import fs from 'fs'
+import { GridFSBucket, ObjectId } from 'mongodb'
 
 /**
  *
@@ -74,8 +75,15 @@ class imageController {
     const image = model.findOne({ fileId: fileId.toString() })
     if (!image) {
       throw new Error('Image not found')
-      return 404
     }
+
+    const bucket = new GridFSBucket(mongoose.connection.db, {
+      bucketName: 'images'
+    })
+
+    const downloadStream = bucket.openDownloadStream(new ObjectId(fileId))
+
+    return downloadStream
     
 
 
