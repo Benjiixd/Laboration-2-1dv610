@@ -1,3 +1,7 @@
-when saving image, it needs a mongoDB model to save to, a file, and some more stuff
+TODO:
 
-make it so the app is used to initialise the thing
+add a change image
+
+add so you can import a router
+
+make it so you can have custom models
