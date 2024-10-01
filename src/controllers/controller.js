@@ -17,9 +17,9 @@ export class Controller {
       const file = req.file
       console.log(`Received image: ${JSON.stringify(file)}`)
       const imageModel = new ImageModel()
-      const saver = new imageController(imageModel)
+      const saver = new imageController(ImageModel)
       await saver.saveImage(file, ImageModel)
-      const image = await saver.getImage("66fba1c5c7da1df066a2abb3", ImageModel)
+      const image = await saver.getImage("66fba7663485c166ddca1855", ImageModel)
       image.pipe(res)
 
       

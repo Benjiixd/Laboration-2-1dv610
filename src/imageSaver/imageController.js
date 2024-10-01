@@ -16,7 +16,7 @@ class imageController {
    * @param model
    */
   constructor (model) {
-    this.Model2 = model
+    this.Model = model
   }
 
   /**
@@ -32,7 +32,7 @@ class imageController {
 
     console.log('file', file)
 
-    const newImage = new model({
+    const newImage = new this.Model({
       filename: file.originalname,
       mimetype: file.mimetype,
       size: file.size,
@@ -64,15 +64,15 @@ class imageController {
 
   /**
    *
+   * @param fileId
+   * @param model
    */
   getImage (fileId, model) {
-    
-
     if (!fileId) {
       throw new Error('No image provided')
     }
 
-    const image = model.findOne({ fileId: fileId.toString() })
+    const image = this.Model.findOne({ fileId: fileId.toString() })
     if (!image) {
       throw new Error('Image not found')
     }
@@ -84,10 +84,6 @@ class imageController {
     const downloadStream = bucket.openDownloadStream(new ObjectId(fileId))
 
     return downloadStream
-    
-
-
-
   }
 }
 
