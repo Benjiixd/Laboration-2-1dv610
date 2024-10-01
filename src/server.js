@@ -8,19 +8,15 @@ import { connectToDatabase } from './config/mongoose.js'
 import multer from 'multer'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { imageController } from './imageSaver/imageController.js'
+import { ImageModel } from './models/imageModel.js'
 
 dotenv.config()
 
-const app = express()
-app.use(cors())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(helmet())
-// parse application/json
-app.use(bodyParser.json())
-app.use(bodyParser.json())
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
+const controller = new imageController(ImageModel)
+const app = await controller.initializeApp() 
+
+
 
 app.use('/', router)
 

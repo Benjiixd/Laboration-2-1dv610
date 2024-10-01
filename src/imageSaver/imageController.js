@@ -1,10 +1,12 @@
-/**
- *
- */
-import { ImageModel } from '../models/imageModel.js'
 import mongoose from 'mongoose'
 import fs from 'fs'
 import { GridFSBucket, ObjectId } from 'mongodb'
+import helmet from 'helmet'
+import cors from 'cors'
+import bodyParser from 'body-parser'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import express from 'express'
 
 /**
  *
@@ -17,6 +19,24 @@ class imageController {
    */
   constructor (model) {
     this.Model = model
+  }
+
+  /**
+   *
+   */
+  async initializeApp () {
+    const app = express()
+    app.use(cors())
+    app.use(bodyParser.urlencoded({ extended: false }))
+    app.use(helmet())
+
+    app.use(bodyParser.json())
+    const __filename = fileURLToPath(import.meta.url)
+    const __dirname = path.dirname(__filename)
+
+    app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
+
+    return app
   }
 
   /**
