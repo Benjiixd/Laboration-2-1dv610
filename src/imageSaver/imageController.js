@@ -157,6 +157,7 @@ class imageController {
    * @returns { object } the updated and saved image.
    */
   async updateImage (fileId, file) {
+    console.log("TEST_______________________________")
     if (!fileId || !file) {
       throw new Error('No image or file ID provided')
     }

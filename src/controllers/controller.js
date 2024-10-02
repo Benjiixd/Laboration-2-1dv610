@@ -18,14 +18,14 @@ export class Controller {
       console.log(`Received image: ${JSON.stringify(file)}`)
       const saver = new imageController(ImageModel)
       await saver.saveImage(file)
-      const data = await saver.getImage("66fc3d9277356c9d0c5db1ac")
+      const data = await saver.getImage("66fcfefe4a71aee2fc2caa97")
       console.log('data in req:', data)
       res.setHeader('Content-Type', data.metadata.mimetype)
       res.setHeader('metadata', JSON.stringify(data.metadata))
 
-      //const data2 = await saver.updateImage("66fc3d9277356c9d0c5db1ac", file)
+      const data2 = await saver.updateImage("66fcfefe4a71aee2fc2caa97", file)
 
-      //const data3 = await saver.getImage("66fc3d9277356c9d0c5db1ac")
+      //const data3 = await saver.getImage("66fcfefe4a71aee2fc2caa97")
 
       data.image.pipe(res)
 
