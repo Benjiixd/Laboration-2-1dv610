@@ -7,22 +7,25 @@ import bodyParser from 'body-parser'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import express from 'express'
+import { ImageModel } from '../models/imageModel' 
 
 /**
  *
  */
 class imageController {
   /**
+   * Constructor for the imageController.
    *
-   * @param dbString
-   * @param model
+   * @param { object } model The model to use for saving images, if set to undefined, there's a default model.
    */
-  constructor (model) {
-    this.Model = model
+  constructor (model = new ImageModel()) {
+    this.Model = model // the model to use for images
   }
 
   /**
+   * Creates a app with all the correct settings for ease of use.
    *
+   * @returns { object } A express app object.
    */
   async initializeApp () {
     const app = express()
@@ -40,10 +43,11 @@ class imageController {
   }
 
   /**
+   * Method to save a image to a mongoDB database.
+   * TODO: add a file type checker.
    *
-   * @param image
-   * @param file
-   * @param model
+   * @param { File } file the file to upload.
+   * @returns { object } The saved image in the DB.
    */
   async saveImage (file) {
     if (!file) {
@@ -94,9 +98,11 @@ class imageController {
   }
 
   /**
+   * Function to retrive a image from the DB.
+   * TODO: remove console logs.
    *
-   * @param fileId
-   * @param model
+   * @param { string } fileId The fileID of the image.
+   * @returns { file } the image file.
    */
   async getImage (fileId) {
     if (!fileId) {
@@ -142,14 +148,15 @@ class imageController {
       console.log('Image not found')
       return null
     }
-
-    return null
   }
 
   /**
+   * Function to update a image by replacing it.
+   * TODO: fix the not found issue, add a file type checker.
    *
-   * @param fileId
-   * @param file
+   * @param { string } fileId the fileID of the saved image.
+   * @param {file} file the new file to upload.
+   * @returns { object } the updated and saved image.
    */
   async updateImage (fileId, file) {
     if (!fileId || !file) {
