@@ -151,10 +151,9 @@ class ImageController {
 
   /**
    * Function to delete an image from the DB.
-   * TODO: fix the error handling issue.
    *
-   * @param {string} fileId the fileID of the image.
-   * @returns {number} 1 if the image was deleted.
+   * @param {string} fileId - The fileID of the image.
+   * @returns {number} - Returns 1 if the image was deleted successfully.
    */
   async deleteImage (fileId) {
     try {
@@ -162,33 +161,16 @@ class ImageController {
         throw new Error('No image ID provided')
       }
 
+      // Find the image document in MongoDB
       const image = await this.Model.findOne({ fileId: fileId.toString() })
       if (!image) {
         throw new Error('Image not found in MongoDB')
       }
 
-      const bucket = new GridFSBucket(mongoose.connection.db, {
-        bucketName: 'images'
-      })
-
-      const fileExists = await bucket.find({ _id: new ObjectId(fileId) }).hasNext()
-      if (!fileExists) {
-        throw new Error(`File not found in GridFS with ID: ${fileId}`)
-      }
-
-      await new Promise((resolve, reject) => {
-        bucket.delete(new ObjectId(fileId), (error) => {
-          if (error) {
-            console.error('Error deleting image from GridFS:', error)
-            return reject(new Error('Failed to delete image from GridFS'))
-          }
-          console.log('Image deleted from GridFS:', fileId)
-          resolve()
-        })
-      })
-
+      // Delete the image document from MongoDB
       await image.deleteOne()
       console.log('Image deleted from MongoDB:', fileId)
+
       return 1 // Return success
     } catch (err) {
       console.error('Error in deleteImage:', err.message)
