@@ -4,9 +4,7 @@
 
 
 
-
-
-# Namngivning
+# Namngivnings Tabell
 
 ImageController
 
@@ -17,6 +15,15 @@ saveImage()
 data
 
 existingImage
+
+# Clean code kapitel 2 reflektion
+
+
+# Funktions tabell
+
+
+# Clean code kapitel 3 reflektion
+
 
 # Egen reflektion
 
