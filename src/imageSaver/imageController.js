@@ -94,7 +94,6 @@ class ImageController {
 
   /**
    * Function to retrive a image from the DB.
-   * TODO: remove console logs.
    *
    * @param { string } fileId The fileID of the image.
    * @returns { file } the image file.
@@ -152,7 +151,7 @@ class ImageController {
 
   /**
    * Function to delete an image from the DB.
-   * TODO: remove console logs, and error handling.
+   * TODO: fix the error handling issue.
    *
    * @param {string} fileId the fileID of the image.
    * @returns {number} 1 if the image was deleted.
