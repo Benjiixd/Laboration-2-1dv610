@@ -70,4 +70,25 @@ export class Controller {
       return res.status(404).send(err.message)
     }
   }
+
+  /**
+   * Function to update an image.
+   *
+   * @param {object} req request object.
+   * @param {object} res response object.
+   */
+  async update (req, res) {
+    try {
+      const fileId = req.params.id
+      const file = req.file
+      if (!fileId) {
+        res.status(400).send('No image ID provided')
+      }
+      const data = await this.saver.updateImage(fileId, file)
+      res.status(200).send('Image updated with id: ' + data._id)
+    } catch (err) {
+      console.error(err)
+      res.status(500).send('Internal server error')
+    }
+  }
 }
