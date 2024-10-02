@@ -106,12 +106,12 @@ class imageController {
    */
   async getImage (fileId) {
     if (!fileId) {
-      throw new Error('No image provided')
+      return null
     }
 
     const image = await this.Model.findOne({ fileId: fileId.toString() })
     if (!image) {
-      throw new Error('Image not found')
+      return null
     }
 
     const bucket = new GridFSBucket(mongoose.connection.db, {
@@ -146,6 +146,46 @@ class imageController {
       console.log('Image not found')
       return null
     }
+  }
+
+  async deleteImage (fileId) {
+    if (!fileId) {
+      throw new Error('No image provided')
+    }
+
+    const image = await this.Model.findOne({ fileId: fileId.toString() })
+    if (!image) {
+      throw new Error('Image not found')
+    }
+
+    const bucket = new GridFSBucket(mongoose.connection.db, {
+      bucketName: 'images'
+    })
+
+    // Ensure that the file exists in GridFS before attempting to delete it
+    const fileExists = await bucket.find({ _id: new ObjectId(fileId) }).hasNext()
+
+    if (!fileExists) {
+      throw new Error(`File not found in GridFS with ID: ${fileId}`)
+    }
+
+    // Delete the old image file from GridFS
+    await new Promise((resolve, reject) => {
+      bucket.delete(new ObjectId(fileId), (error) => {
+        if (error) {
+          console.error('Error deleting old image from GridFS:', error)
+          return reject(new Error('Failed to delete old image'))
+        }
+        console.log('Old image deleted from GridFS:', fileId)
+        resolve()
+      })
+    })
+
+    // Delete the image document from MongoDB
+    await image.deleteOne()
+
+    console.log('Image deleted:', fileId)
+    return 1
   }
 
   /**

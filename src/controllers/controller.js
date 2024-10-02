@@ -29,13 +29,22 @@ export class Controller {
     if(!req.params.id) {
       res.status(400).send('No image ID provided')
     }
-    const data = await saver.getImage(req.params.id)
+    const data = await this.saver.getImage(req.params.id)
+    if (data==undefined || data == null) {
+      res.status(404).send('Image not found')
+    }
       res.setHeader('Content-Type', data.metadata.mimetype)
       res.setHeader('metadata', JSON.stringify(data.metadata))
       data.image.pipe(res)
   }
 
   async delete (req, res) {
+    const data = this.saver.deleteImage(req.params.id)
+    if (data == 1) {
+      res.status(200).send('Image deleted')
+    }
+    res.status(404).send('Image not found')
+    
   }
 
 }
