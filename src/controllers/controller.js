@@ -5,6 +5,7 @@ import express from 'express'
  * Controller class for the server.
  */
 export class Controller {
+  saver = new imageController(ImageModel)
   /**
    * Function for handling a post.
    *
@@ -15,24 +16,26 @@ export class Controller {
     try {
       console.log(`Received data: ${JSON.stringify(req.body)}`)
       const file = req.file
-      console.log(`Received image: ${JSON.stringify(file)}`)
-      const saver = new imageController(ImageModel)
-      await saver.saveImage(file)
-      const data = await saver.getImage("66fd04a21c160d11e853619f")
-      console.log('data in req:', data)
-      res.setHeader('Content-Type', data.metadata.mimetype)
-      res.setHeader('metadata', JSON.stringify(data.metadata))
-
-      //const data2 = await saver.updateImage("66fd04a21c160d11e853619f", file)
-
-      const data3 = await saver.getImage("66fd04a21c160d11e853619f")
-
-      data.image.pipe(res)
-
-      
-
+      const data = await this.saver.saveImage(file)
+      console.log(`Saved data: ${JSON.stringify(data)}`)
+      res.status(200).send('File uploaded with id: ' + data._id)
     } catch (err) {
       console.error(err)
+      res.status(500).send('Internal server error')
     }
   }
+
+  async get (req, res) {
+    if(!req.params.id) {
+      res.status(400).send('No image ID provided')
+    }
+    const data = await saver.getImage(req.params.id)
+      res.setHeader('Content-Type', data.metadata.mimetype)
+      res.setHeader('metadata', JSON.stringify(data.metadata))
+      data.image.pipe(res)
+  }
+
+  async delete (req, res) {
+  }
+
 }

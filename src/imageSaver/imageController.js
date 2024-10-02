@@ -7,7 +7,7 @@ import bodyParser from 'body-parser'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import express from 'express'
-import { ImageModel } from '../models/imageModel.js' 
+import { ImageModel } from '../models/imageModel.js'
 
 /**
  *
@@ -149,86 +149,86 @@ class imageController {
   }
 
   /**
- * Function to update an image by replacing it.
- * 
- * @param {string} fileId - The fileID of the saved image.
- * @param {file} file - The new file to upload.
- * @returns {object} - The updated and saved image.
- */
-async updateImage(fileId, file) {
-  console.log("TEST_______________________________");
-  
-  if (!fileId || !file) {
-    throw new Error('No image or file ID provided');
-  }
+   * Function to update an image by replacing it.
+   * TODO: Make this actually work.
+   *
+   * @param {string} fileId - The fileID of the saved image.
+   * @param {file} file - The new file to upload.
+   * @returns {object} - The updated and saved image.
+   */
+  async updateImage (fileId, file) {
+    console.log('TEST_______________________________')
 
-  // Find the existing image document
-  const existingImage = await this.Model.findOne({ fileId: fileId.toString() });
-  
-  if (!existingImage) {
-    throw new Error('Image not found');
-  }
+    if (!fileId || !file) {
+      throw new Error('No image or file ID provided')
+    }
 
-  const bucket = new GridFSBucket(mongoose.connection.db, {
-    bucketName: 'images'
-  });
+    // Find the existing image document
+    const existingImage = await this.Model.findOne({ fileId: fileId.toString() })
 
-  // Ensure that the file exists in GridFS before attempting to delete it
-  const fileExists = await bucket.find({ _id: new ObjectId(fileId) }).hasNext();
+    if (!existingImage) {
+      throw new Error('Image not found')
+    }
 
-  if (!fileExists) {
-    throw new Error(`File not found in GridFS with ID: ${fileId}`);
-  }
-
-  // Delete the old image file from GridFS
-  await new Promise((resolve, reject) => {
-    bucket.delete(new ObjectId(fileId), (error) => {
-      if (error) {
-        console.error('Error deleting old image from GridFS:', error);
-        return reject(new Error('Failed to delete old image'));
-      }
-      console.log('Old image deleted from GridFS:', fileId);
-      resolve();
-    });
-  });
-
-  console.log("TEST2_______________________________");
-
-  // Upload the new image using the same fileId and _id
-  const uploadStream = bucket.openUploadStreamWithId(new ObjectId(fileId), file.originalname, {
-    contentType: file.mimetype
-  });
-
-  console.log("TEST3_______________________________");
-
-  const fileStream = fs.createReadStream(file.path);
-  fileStream.pipe(uploadStream)
-    .on('error', (error) => {
-      console.error('Error uploading new image to GridFS:', error);
+    const bucket = new GridFSBucket(mongoose.connection.db, {
+      bucketName: 'images'
     })
-    .on('finish', async () => {
-      console.log('New image uploaded to GridFS with id:', existingImage._id.toString());
 
-      // Update the metadata in the MongoDB document
-      existingImage.filename = file.originalname;
-      existingImage.mimetype = file.mimetype;
-      existingImage.size = file.size;
-      existingImage.updatedAt = new Date();
-      await existingImage.save();
+    // Ensure that the file exists in GridFS before attempting to delete it
+    const fileExists = await bucket.find({ _id: new ObjectId(fileId) }).hasNext()
 
-      // Optionally delete the local file after upload
-      fs.unlink(file.path, (err) => {
-        if (err) {
-          console.error('Error deleting local file:', err);
-        } else {
-          console.log('Local file deleted:', file.path);
+    if (!fileExists) {
+      throw new Error(`File not found in GridFS with ID: ${fileId}`)
+    }
+
+    // Delete the old image file from GridFS
+    await new Promise((resolve, reject) => {
+      bucket.delete(new ObjectId(fileId), (error) => {
+        if (error) {
+          console.error('Error deleting old image from GridFS:', error)
+          return reject(new Error('Failed to delete old image'))
         }
-      });
-    });
+        console.log('Old image deleted from GridFS:', fileId)
+        resolve()
+      })
+    })
 
-  return existingImage;
-}
+    console.log('TEST2_______________________________')
 
+    // Upload the new image using the same fileId and _id
+    const uploadStream = bucket.openUploadStreamWithId(new ObjectId(fileId), file.originalname, {
+      contentType: file.mimetype
+    })
+
+    console.log('TEST3_______________________________')
+
+    const fileStream = fs.createReadStream(file.path)
+    fileStream.pipe(uploadStream)
+      .on('error', (error) => {
+        console.error('Error uploading new image to GridFS:', error)
+      })
+      .on('finish', async () => {
+        console.log('New image uploaded to GridFS with id:', existingImage._id.toString())
+
+        // Update the metadata in the MongoDB document
+        existingImage.filename = file.originalname
+        existingImage.mimetype = file.mimetype
+        existingImage.size = file.size
+        existingImage.updatedAt = new Date()
+        await existingImage.save()
+
+        // Optionally delete the local file after upload
+        fs.unlink(file.path, (err) => {
+          if (err) {
+            console.error('Error deleting local file:', err)
+          } else {
+            console.log('Local file deleted:', file.path)
+          }
+        })
+      })
+
+    return existingImage
+  }
 }
 
 export { imageController }

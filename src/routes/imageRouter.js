@@ -8,3 +8,4 @@ export const router = express.Router()
 const controller = new Controller()
 
 router.post('/', upload.single('file'), (req, res, next) => controller.post(req, res))
+router.get('/', (req, res, next) => controller.get(req, res))
