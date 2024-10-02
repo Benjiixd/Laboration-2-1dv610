@@ -32,7 +32,6 @@ const schema = new mongoose.Schema({
     required: true
   }
 
-
 })
 
 schema.add(BASE_SCHEMA)

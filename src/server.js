@@ -1,20 +1,13 @@
-import express from 'express'
 import dotenv from 'dotenv'
 import { router } from './routes/router.js'
-import helmet from 'helmet'
-import cors from 'cors'
-import bodyParser from 'body-parser'
 import { connectToDatabase } from './config/mongoose.js'
-import multer from 'multer'
-import path from 'path'
-import { fileURLToPath } from 'url'
 import { ImageController } from './imageSaver/imageController.js'
 import { ImageModel } from './models/imageModel.js'
 
 dotenv.config()
 
 const controller = new ImageController(ImageModel)
-const app = await controller.initializeApp() 
+const app = await controller.initializeApp()
 
 app.use('/', router)
 

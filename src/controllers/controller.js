@@ -55,7 +55,7 @@ export class Controller {
     try {
       console.log(`Received data: ${JSON.stringify(req.body)}`)
       const data = this.saver.deleteImage(req.params.id)
-      if (data == 1) {
+      if (data === 1) {
         res.status(200).send('Image deleted')
       }
       res.status(404).send('Image not found')
