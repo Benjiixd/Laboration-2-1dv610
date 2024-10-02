@@ -111,8 +111,8 @@ expected outcome:
 
 |          | .1 | .2 |
 |----------|----|----|
-| TC.1     |    |    |
-| TC.2     |    |    |
-| TC.3     |    |    |
-| TC.4     |    |    |
-| Coverage |    |    |
+| TC.1     |  OK  |  OK  |
+| TC.2     |  OK  |  OK  |
+| TC.3     |  OK  |  OK  |
+| TC.4     |  0  |  1  |
+| Coverage |  3/4  |  4/4  |

@@ -79,7 +79,7 @@ export class Controller {
    */
   async update (req, res) {
     try {
-      const fileId = req.params.id
+      const fileId = req.body.fileId
       const file = req.file
       if (!fileId) {
         res.status(400).send('No image ID provided')
