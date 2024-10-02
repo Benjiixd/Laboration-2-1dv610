@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { BASE_SCHEMA } from './baseSchema.js'
 
-// Create a schema.
+// default schema for the images module.
 const schema = new mongoose.Schema({
   filename: {
     type: String,

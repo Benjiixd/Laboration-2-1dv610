@@ -7,7 +7,7 @@ import bodyParser from 'body-parser'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import express from 'express'
-import { ImageModel } from '../models/imageModel' 
+import { ImageModel } from '../models/imageModel.js' 
 
 /**
  *
@@ -109,7 +109,7 @@ class imageController {
       throw new Error('No image provided')
     }
 
-    const image = this.Model.findOne({ fileId: fileId.toString() })
+    const image = await this.Model.findOne({ fileId: fileId.toString() })
     if (!image) {
       throw new Error('Image not found')
     }
@@ -120,18 +120,16 @@ class imageController {
 
     const downloadStream = bucket.openDownloadStream(new ObjectId(fileId))
 
-    const image2 = await this.Model.findOne({ fileId })
-
-    if (image2) {
+    if (image) {
       const metadata = {
-        filename: image2.filename,
-        mimetype: image2.mimetype,
-        size: image2.size,
-        uploadedAt: image2.uploadedAt,
-        id: image2._id,
-        createdAt: image2.createdAt,
-        updatedAt: image2.updatedAt,
-        __v: image2.__v
+        filename: image.filename,
+        mimetype: image.mimetype,
+        size: image.size,
+        uploadedAt: image.uploadedAt,
+        id: image._id,
+        createdAt: image.createdAt,
+        updatedAt: image.updatedAt,
+        __v: image.__v
       }
 
       console.log('Image found:', metadata)
@@ -176,7 +174,7 @@ class imageController {
       }
       console.log('Old image deleted from gridfs:', fileId)
     })
-    const uploadStream = bucket.openUploadStreamWithId(existingImage._id, file.originalname, {
+    const uploadStream = bucket.openUploadStreamWithId(existingImage.fileId, file.originalname, {
       contentType: file.mimetype
     })
 
