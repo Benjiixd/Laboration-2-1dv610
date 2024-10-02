@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import { router } from './routes/router.js'
 import { connectToDatabase } from './config/mongoose.js'
 import { ImageController } from './imageSaver/imageController.js'
-import { ImageModel } from './models/imageModel.js'
+import { ImageModel } from './imageSaver/imageModel.js'
 
 dotenv.config()
 

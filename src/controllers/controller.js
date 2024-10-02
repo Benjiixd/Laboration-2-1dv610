@@ -1,4 +1,4 @@
-import { ImageModel } from '../models/imageModel.js'
+import { ImageModel } from '../imageSaver/imageModel.js'
 import { ImageController } from '../imageSaver/imageController.js'
 /**
  * Controller class for the server.
