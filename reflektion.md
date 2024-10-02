@@ -6,21 +6,16 @@
 
 # Namngivnings Tabell
 
-ImageController
-
-initializeApp()
-
-saveImage()
-
-data
-
-existingImage
-
+![alt text](image.png)
+![alt text](image-1.png)
 
 # Clean code kapitel 2 reflektion
 
 
 # Funktions tabell
+
+![alt text](image-2.png)
+![alt text](image-3.png)
 
 
 # Clean code kapitel 3 reflektion
