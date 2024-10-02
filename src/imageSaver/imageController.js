@@ -12,7 +12,7 @@ import { ImageModel } from '../models/imageModel.js'
 /**
  *
  */
-class imageController {
+class ImageController {
   /**
    * Constructor for the imageController.
    *
@@ -32,13 +32,12 @@ class imageController {
     app.use(cors())
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(helmet())
-
     app.use(bodyParser.json())
     const __filename = fileURLToPath(import.meta.url)
     const __dirname = path.dirname(__filename)
-
     app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
 
+    // Return the app object
     return app
   }
 
@@ -54,8 +53,7 @@ class imageController {
       throw new Error('No image provided')
     }
 
-    console.log('file', file)
-
+    // Create a new image object
     const newImage = new this.Model({
       filename: file.originalname,
       mimetype: file.mimetype,
@@ -63,19 +61,16 @@ class imageController {
       uploadedAt: new Date(),
       updatedAt: new Date()
     })
-
-    console.log('newImage', newImage)
-
     const saved = await newImage.save()
 
+    // Based of the new image object, create a new upload stream.
     const uploadStream = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
       bucketName: 'images'
     }).openUploadStreamWithId(newImage._id, file.originalname, {
       contentType: file.mimetype
     })
 
-    console.log('newImage' + newImage)
-
+    // Read the file and pipe it to the upload stream in order to store it in the DB.
     const fileStream = fs.createReadStream(file.path)
     fileStream.pipe(uploadStream)
       .on('error', function (error) {
@@ -110,26 +105,25 @@ class imageController {
         throw new Error('No image ID provided')
       }
 
+      // Find the image document in MongoDB
       const image = await this.Model.findOne({ fileId: fileId.toString() })
       if (!image) {
         throw new Error('Image not found')
       }
-
+      // Create a new GridFSBucket for the images collection
       const bucket = new GridFSBucket(mongoose.connection.db, {
         bucketName: 'images'
       })
-
       const fileExists = await bucket.find({ _id: new ObjectId(fileId) }).hasNext()
       if (!fileExists) {
         throw new Error(`File not found in GridFS with ID: ${fileId}`)
       }
-
+      // Open a download stream for the image file
       const downloadStream = bucket.openDownloadStream(new ObjectId(fileId))
-
       if (!downloadStream) {
         throw new Error('Failed to open download stream')
       }
-
+      // Return the download stream and metadata
       if (image) {
         const metadata = {
           filename: image.filename,
@@ -141,16 +135,10 @@ class imageController {
           updatedAt: image.updatedAt,
           __v: image.__v
         }
-
-        console.log('Image found:', metadata)
-
         const data = {
           image: downloadStream,
           metadata
         }
-
-        console.log('data:', data)
-
         return data
       } else {
         console.log('Image not found')
@@ -163,8 +151,11 @@ class imageController {
   }
 
   /**
+   * Function to delete an image from the DB.
+   * TODO: remove console logs, and error handling.
    *
-   * @param fileId
+   * @param {string} fileId the fileID of the image.
+   * @returns {number} 1 if the image was deleted.
    */
   async deleteImage (fileId) {
     try {
@@ -172,23 +163,19 @@ class imageController {
       if (!fileId) {
         throw new Error('No image ID provided')
       }
-
       // Find image document in MongoDB
       const image = await this.Model.findOne({ fileId: fileId.toString() })
       if (!image) {
         throw new Error('Image not found in MongoDB')
       }
-
       const bucket = new GridFSBucket(mongoose.connection.db, {
         bucketName: 'images'
       })
-
       // Check if the file exists in GridFS
       const fileExists = await bucket.find({ _id: new ObjectId(fileId) }).hasNext()
       if (!fileExists) {
         throw new Error(`File not found in GridFS with ID: ${fileId}`)
       }
-
       // Delete the file from GridFS
       await new Promise((resolve, reject) => {
         bucket.delete(new ObjectId(fileId), (error) => {
@@ -200,10 +187,8 @@ class imageController {
           resolve()
         })
       })
-
       // Delete the image document from MongoDB
       await image.deleteOne()
-
       console.log('Image deleted from MongoDB:', fileId)
       return 1 // Return success
     } catch (err) {
@@ -295,4 +280,4 @@ class imageController {
   }
 }
 
-export { imageController }
+export { ImageController }

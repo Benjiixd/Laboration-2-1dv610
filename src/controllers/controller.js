@@ -1,11 +1,10 @@
 import { ImageModel } from '../models/imageModel.js'
-import { imageController } from '../imageSaver/imageController.js'
-import express from 'express'
+import { ImageController } from '../imageSaver/imageController.js'
 /**
  * Controller class for the server.
  */
 export class Controller {
-  saver = new imageController(ImageModel)
+  saver = new ImageController(ImageModel)
   /**
    * Function for handling a post.
    *
@@ -25,23 +24,33 @@ export class Controller {
     }
   }
 
+  /**
+   * Function to get an image.
+   *
+   * @param { object } req request object.
+   * @param { object } res response object.
+   */
   async get (req, res) {
-    if(!req.params.id) {
+    if (!req.params.id) {
       res.status(400).send('No image ID provided')
     }
-    try{
+    try {
       const data = await this.saver.getImage(req.params.id)
       res.setHeader('Content-Type', data.metadata.mimetype)
       res.setHeader('metadata', JSON.stringify(data.metadata))
       data.image.pipe(res)
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err)
       res.status(404).send('Image not found')
     }
-    
   }
 
+  /**
+   * Function to delete an image.
+   *
+   * @param { object } req request object.
+   * @param { object } res response object.
+   */
   async delete (req, res) {
     try {
       console.log(`Received data: ${JSON.stringify(req.body)}`)
@@ -50,13 +59,9 @@ export class Controller {
         res.status(200).send('Image deleted')
       }
       res.status(404).send('Image not found')
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err)
       res.status(500).send('Internal server error')
     }
-    
-    
   }
-
 }

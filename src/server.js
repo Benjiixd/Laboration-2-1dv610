@@ -8,15 +8,13 @@ import { connectToDatabase } from './config/mongoose.js'
 import multer from 'multer'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { imageController } from './imageSaver/imageController.js'
+import { ImageController } from './imageSaver/imageController.js'
 import { ImageModel } from './models/imageModel.js'
 
 dotenv.config()
 
-const controller = new imageController(ImageModel)
+const controller = new ImageController(ImageModel)
 const app = await controller.initializeApp() 
-
-
 
 app.use('/', router)
 
