@@ -50,18 +50,24 @@ export class Controller {
    *
    * @param { object } req request object.
    * @param { object } res response object.
+   * @returns { object } response object
    */
   async delete (req, res) {
     try {
-      console.log(`Received data: ${JSON.stringify(req.body)}`)
-      const data = this.saver.deleteImage(req.params.id)
-      if (data === 1) {
-        res.status(200).send('Image deleted')
+      const fileId = req.params.id
+      if (!fileId) {
+        return res.status(400).send('No image ID provided')
       }
-      res.status(404).send('Image not found')
+
+      const result = await this.saver.deleteImage(fileId)
+      if (result === 1) {
+        return res.status(200).send('Image deleted successfully')
+      } else {
+        return res.status(404).send('Image not found')
+      }
     } catch (err) {
-      console.error(err)
-      res.status(500).send('Internal server error')
+      console.error('Error in delete:', err.message)
+      return res.status(404).send(err.message)
     }
   }
 }
