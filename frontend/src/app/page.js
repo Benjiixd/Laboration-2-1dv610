@@ -7,6 +7,12 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <p>Hello world</p>
         <ItemCard></ItemCard>
+        <ItemCard></ItemCard>
+        <ItemCard></ItemCard>
+        <ItemCard></ItemCard>
+        <ItemCard></ItemCard>
+        <ItemCard></ItemCard>
+        <ItemCard></ItemCard>
       </main>
 
       

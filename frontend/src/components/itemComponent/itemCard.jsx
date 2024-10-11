@@ -19,8 +19,8 @@ export default function ItemCard({ item }) {
             </CardHeader>
             <CardContent>
                 <Image src={'/hoodieImage.jpg'}
-                    width={500}
-                    height={500}
+                    width={200}
+                    height={200}
                     alt="Picture of the author"></Image>
             </CardContent>
             <CardFooter>
