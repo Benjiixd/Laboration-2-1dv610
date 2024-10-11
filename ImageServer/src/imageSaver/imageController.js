@@ -7,7 +7,7 @@ import bodyParser from 'body-parser'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import express from 'express'
-import { ImageModel } from '../imageSaver/imageModel.js'
+import { ImageModel } from './imageModel.js'
 
 /**
  *
