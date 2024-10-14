@@ -9,6 +9,18 @@ import {
 } from "@/components/ui/card"
 import Image from "next/image";
 
+class ItemCardController {
+    constructor() {
+        this.Image
+        this.Name
+        this.Description
+        this.Status
+    }
+
+    setStatus(status) {
+        this.Status = status
+    }
+}
 
 export default function ItemCard({ item }) {
     return (
