@@ -1,10 +1,9 @@
-import { AlertCircle } from "lucide-react"
-
 import {
     Alert,
     AlertDescription,
     AlertTitle,
 } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 
 export function FailedLogin() {
     return (
@@ -12,7 +11,7 @@ export function FailedLogin() {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-                Wrong username or password. Please try again.
+                Error during login.
             </AlertDescription>
         </Alert>
     )

@@ -1,5 +1,5 @@
-import { ImageModel } from '../imageSaver/imageModel.js'
-import { ImageController } from '../imageSaver/imageController.js'
+import { ImageModel } from './imageModel.js'
+import { ImageController } from './imageController.js'
 /**
  * Controller class for the server.
  */
@@ -35,6 +35,7 @@ export class Controller {
       res.status(400).send('No image ID provided')
     }
     try {
+      console.log('gello')
       const data = await this.saver.getImage(req.params.id)
       res.setHeader('Content-Type', data.metadata.mimetype)
       res.setHeader('metadata', JSON.stringify(data.metadata))
