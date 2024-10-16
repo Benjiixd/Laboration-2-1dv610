@@ -31,6 +31,32 @@ export default function Page() {
                 console.error("Network error:", error);
             }
         }
+    
+        async addImage(formData){
+            try {
+                console.log(formData)
+                const response = await fetch("http://localhost:3020/users/addImage", {
+                    method: "POST",
+                    body: formData,
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log("Data submitted successfully", result);
+                    return result
+                } else {
+                    console.error("Server error:", response.statusText);
+                    return null;
+                }
+            } catch (error) {
+                console.error("Network error:", error);
+            }
+        }
+
+        async delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        
 
     }
     const [name, setName] = useState("");
@@ -44,9 +70,16 @@ export default function Page() {
         formData.append("description", description);
         formData.append("file", file);
         const upload = await imageHandler.postImage(formData);
+        console.log(upload)
         if (upload) {
             console.log("Image uploaded successfully");
-            
+            await imageHandler.delay(5000);
+
+            const formData = new FormData();
+            formData.append("imageId", upload);
+            formData.append("username", "ben")
+            const add = await imageHandler.addImage(formData);
+            console.log(add)
         } else {
             console.error("Image upload failed");
         }

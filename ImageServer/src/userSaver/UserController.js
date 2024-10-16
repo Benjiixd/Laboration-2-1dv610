@@ -99,6 +99,7 @@ export class UserController {
 
   async addImage (req, res) {
     try {
+      console.log('addImage')
       const { username, imageId } = req.body
       if (!username || !imageId) {
         return res.status(400).send('Missing required fields')
@@ -115,6 +116,7 @@ export class UserController {
       const updated = await UserModel.findOne({ username })
       res.send(updated)
     } catch (error) {
+      console.log(error)
       res.status(500).send(error)
     }
 }
