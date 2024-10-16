@@ -28,7 +28,10 @@ export default function Header() {
 
     return (
         <header className="flex items-center justify-between w-full p-8 bg-#e5e7eb">
-            <h1 className="text-2xl font-bold">mAI gym</h1>
+            <Link href="/upload">
+                <h1 className="text-2xl font-bold">UPLOAD</h1>
+            </Link>
+            
             <nav className="flex gap-4">
                 <Link href="/test">
                     <p className="text-2xl font-bold cursor-pointer">{pathname}</p> {/* Changed to an <a> tag inside Link */}
