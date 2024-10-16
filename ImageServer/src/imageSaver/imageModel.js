@@ -30,6 +30,10 @@ const schema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     required: true
+  },
+  metadata: {
+    type: Object,
+    required: false
   }
 
 })

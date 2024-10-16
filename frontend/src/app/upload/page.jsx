@@ -22,7 +22,8 @@ export default function Page() {
                 body: formData,
             });
             if (response.ok) {
-                console.log("Data submitted successfully");
+                const result = await response.json();
+                console.log("Data submitted successfully", result.data_id);
             } else {
                 console.error("Server error:", response.statusText);
             }

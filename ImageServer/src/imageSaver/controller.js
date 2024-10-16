@@ -15,9 +15,14 @@ export class Controller {
     try {
       console.log(`Received data: ${JSON.stringify(req.body)}`)
       const file = req.file
-      const data = await this.saver.saveImage(file)
+      const metadata = {
+        title: req.body.title,
+        description: req.body.description,
+        owner: req.body.owner
+      }
+      const data = await this.saver.saveImage(file, metadata)
       console.log(`Saved data: ${JSON.stringify(data)}`)
-      res.status(200).send('File uploaded with id: ' + data._id)
+      res.status(200).json({ data_id: data.id });
     } catch (err) {
       console.error(err)
       res.status(500).send('Internal server error')

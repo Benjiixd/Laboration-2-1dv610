@@ -48,7 +48,7 @@ class ImageController {
    * @param { File } file the file to upload.
    * @returns { object } The saved image in the DB.
    */
-  async saveImage (file) {
+  async saveImage (file, metadata) {
     if (!file) {
       throw new Error('No image provided')
     }
@@ -59,7 +59,8 @@ class ImageController {
       mimetype: file.mimetype,
       size: file.size,
       uploadedAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      metadata: metadata
     })
     const saved = await newImage.save()
 
@@ -88,7 +89,6 @@ class ImageController {
           }
         })
       })
-
     return saved
   }
 
@@ -132,7 +132,9 @@ class ImageController {
           id: image._id,
           createdAt: image.createdAt,
           updatedAt: image.updatedAt,
-          __v: image.__v
+          __v: image.__v,
+          title: image.metadata.title,
+          description: image.metadata.description
         }
         const data = {
           image: downloadStream,
