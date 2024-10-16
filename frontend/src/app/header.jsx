@@ -1,12 +1,30 @@
 'use client'
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation';
+import Cookies from "js-cookie";
 
 export default function Header() {
-    let pathname = usePathname();
-    pathname = pathname === '/' ? 'Home' : pathname.charAt(1).toUpperCase() + pathname.slice(2);
+    const pathname = usePathname() === '/' ? 'Home' : usePathname().charAt(1).toUpperCase() + usePathname().slice(2);
+
+    const [username, setUsername] = useState(null); // Store the username
+
+    useEffect(() => {
+        // Fetch the auth-status cookie when the component mounts
+        const authStatus = Cookies.get('auth-status');
+
+        if (authStatus) {
+            try {
+                const parsedAuthStatus = JSON.parse(authStatus); // Parse the JSON string
+                if (parsedAuthStatus && parsedAuthStatus.username) {
+                    setUsername(parsedAuthStatus.username); // Set the username in the state
+                }
+            } catch (error) {
+                console.error('Error parsing auth-status cookie:', error);
+            }
+        }
+    }, []);
 
     return (
         <header className="flex items-center justify-between w-full p-8 bg-#e5e7eb">
@@ -16,8 +34,8 @@ export default function Header() {
                     <p className="text-2xl font-bold cursor-pointer">{pathname}</p> {/* Changed to an <a> tag inside Link */}
                 </Link>
             </nav>
-            <Link href="/account">
-            <h1 className="text-2xl font-bold">LOGIN</h1>
+            <Link href={username ? "/profile" : "/account"}>
+                <h1 className="text-2xl font-bold">{username ? `Welcome, ${username}` : "LOGIN"}</h1>
             </Link>
         </header>
     );
