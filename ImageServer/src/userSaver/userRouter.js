@@ -1,11 +1,10 @@
 /**
  * @file Defines the shift router.
  * @module shiftRouter
- * @author Mats Loock
  */
 // src/routes/ShiftRouter.js
 import express from 'express'
-import { UserController } from '../controllers/UserController.js'
+import { UserController } from './UserController.js'
 
 export const router = express.Router()
 
