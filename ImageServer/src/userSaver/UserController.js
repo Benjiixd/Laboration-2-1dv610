@@ -25,6 +25,11 @@ export class UserController {
         return res.status(400).send('Missing required fields')
       }
 
+      const existingUser = await UserModel.findOne({ username })
+      if (existingUser) {
+        return res.status(400).send('User already exists')
+      }
+
       const newUser = new UserModel({
         username,
         password

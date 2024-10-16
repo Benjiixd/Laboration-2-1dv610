@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import AuthTabs from "@/app/account/components/AuthTabs";
 
+
 const schemas = {
     signInSchema: z.object({
         username: z.string().min(2, { message: "Username must be at least 2 characters." }),
@@ -65,8 +66,12 @@ export default function ProfileForm() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             });
-            const result = await response.json();
-            router.push('/login');
+            const result = response.status
+            console.log(result)
+            if (result.ok){
+                window.location.reload();
+            }
+            
         } catch (error) {
             console.error('Error:', error);
         }

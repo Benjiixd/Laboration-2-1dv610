@@ -1,7 +1,10 @@
+'use client'
+
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SignInForm from "@/app/account/components/SignInForm";
 import CreateAccountForm from "@/app/account/components/CreateAccountForm";
+
 
 export default function AuthTabs({ currentTab, setCurrentTab, onSignIn, signInForm, onCreate, createForm, loginFailed }) {
     return (
@@ -11,7 +14,7 @@ export default function AuthTabs({ currentTab, setCurrentTab, onSignIn, signInFo
                 <TabsTrigger value="Create">Create</TabsTrigger>
             </TabsList>
             <TabsContent value="signIn">
-                {loginFailed && <FailedLogin />}
+                {loginFailed}
                 <SignInForm onSignIn={onSignIn} signInForm={signInForm} />
             </TabsContent>
             <TabsContent value="Create">

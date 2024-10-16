@@ -11,7 +11,7 @@ const app = await controller.initializeApp()
 
 app.use('/', router)
 
-const server = app.listen(2020, async () => {
+const server = app.listen(3020, async () => {
   try {
     await connectToDatabase(process.env.DB_CONNECTION_STRING)
   } catch (err) {
