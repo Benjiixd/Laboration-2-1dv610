@@ -5,31 +5,53 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+
+
+
 export default function Page() {
+    class imageController {
+        constructor() {
+        }
+
+        async postImage(formData) {
+            try {
+                const response = await fetch("http://localhost:3020/images", {
+                    method: "POST",
+                    body: formData,
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log("Data submitted successfully", result.data_id);
+                    return result.data_id;
+                } else {
+                    console.error("Server error:", response.statusText);
+                    return null;
+                }
+            } catch (error) {
+                console.error("Network error:", error);
+            }
+        }
+
+    }
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [file, setFile] = useState(null);
-
+    const imageHandler = new imageController();
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append("name", name);
         formData.append("description", description);
         formData.append("file", file);
-        try {
-            const response = await fetch("http://localhost:3020/images", {
-                method: "POST",
-                body: formData,
-            });
-            if (response.ok) {
-                const result = await response.json();
-                console.log("Data submitted successfully", result.data_id);
-            } else {
-                console.error("Server error:", response.statusText);
-            }
-        } catch (error) {
-            console.error("Network error:", error);
+        const upload = await imageHandler.postImage(formData);
+        if (upload) {
+            console.log("Image uploaded successfully");
+            
+        } else {
+            console.error("Image upload failed");
         }
+
+        
     };
 
     return (

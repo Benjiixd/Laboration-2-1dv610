@@ -16,6 +16,6 @@ router.post('/create', (req, res, next) => controller.create(req, res, next))
 
 router.post('/login', (req, res, next) => controller.login(req, res, next))
 
-router.post('/delete', (req, res, next) => controller.deletePost(req, res, next))
-
 router.post('/verify', (req, res, next) => controller.verify(req, res, next))
+
+router.post('/addImage', (req, res, next) => controller.addImage(req, res, next))

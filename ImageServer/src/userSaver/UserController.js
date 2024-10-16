@@ -96,4 +96,26 @@ export class UserController {
       res.status(401).send(error)
     }
   }
+
+  async addImage (req, res) {
+    try {
+      const { username, imageId } = req.body
+      if (!username || !imageId) {
+        return res.status(400).send('Missing required fields')
+      }
+
+      const user = await UserModel.findOne({ username })
+      if (!user) {
+        return res.status(404).send('User not found')
+      }
+
+      user.images.push(imageId)
+      await user.save()
+
+      const updated = await UserModel.findOne({ username })
+      res.send(updated)
+    } catch (error) {
+      res.status(500).send(error)
+    }
+}
 }
