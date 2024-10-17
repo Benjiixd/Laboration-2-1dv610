@@ -22,11 +22,13 @@ export default function ItemCard({ data }) {
                 if (response.ok) {
                     // Access response headers
                     const headers = response.headers;
+                    console.log('Headers:', headers.get('metadata'));
 
                     // Extract metadata from headers
                     const metadata = {
                         contentType: headers.get('Content-Type'),
-                        customHeader: headers.get('X-Custom-Header'),
+                        customHeader: headers.get('metadata'),
+
                         // Add more headers as needed
                     };
 

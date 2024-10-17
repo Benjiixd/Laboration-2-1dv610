@@ -43,6 +43,8 @@ export class Controller {
     try {
       console.log('gello')
       const data = await this.saver.getImage(req.params.id)
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); // Replace with your client origin
+    res.setHeader('Access-Control-Expose-Headers', 'metadata');
       res.setHeader('Content-Type', data.metadata.mimetype)
       res.setHeader('metadata', JSON.stringify(data.metadata))
       data.image.pipe(res)
