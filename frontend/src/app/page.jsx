@@ -1,53 +1,49 @@
 import Image from "next/image";
 import ItemCard from "@/components/itemComponent/itemCard";
 
-class HomeController {
-  constructor() {
-    this.items = []
-  }
 
-  addItem(item) {
-    this.items.push(item)
-  }
 
-  removeItem(item) {
-    this.items = this.items.filter(i => i !== item)
-  }
+export default async function Home() {
+  
+  class HomeController {
+    constructor() {
+      this.items = [];
+    }
 
-  async getItemsFromApi(username) {
-    console.log("getItemsFromApi")
-    try {
-      const formData = new FormData();
-      formData.append("username", username);
-      const response = await fetch("http://localhost:3020/users/images", {
-        method: "POST",
-        body: formData,
-      });
-      if (response.ok) {
-        console.log("response ok")
-        const result = await response.json();
-        console.log("users images:", result);
-        return result
-      } else {
-        console.error("Server error:", response.statusText);
-        return null;
+    addItem(item) {
+      this.items.push(item);
+    }
+
+    removeItem(item) {
+      this.items = this.items.filter(i => i !== item);
+    }
+
+    async getItemsFromApi(username) {
+      console.log("getItemsFromApi");
+      try {
+        const response = await fetch("http://localhost:3020/users/images", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Setting the correct content type for JSON
+          },
+          body: JSON.stringify({ username }), // Send JSON payload instead of FormData
+        });
+        if (response.ok) {
+          console.log("response ok");
+          const result = await response.json(); // Parse JSON response
+          console.log("users images:", result); // Logging response
+          return result; // Return the result
+        } else {
+          console.error("Server error:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Network error:", error);
       }
-    } catch (error) {
-      console.error("Network error:", error);
     }
   }
 
-  getItems() {
-    return this.items
-  }
-
-}
-
-export default function Home() {
-  
-
     const controller = new HomeController()
-    const items = controller.getItemsFromApi("admin")
+    const items = await controller.getItemsFromApi("admin")
     console.log(items)
   
 
