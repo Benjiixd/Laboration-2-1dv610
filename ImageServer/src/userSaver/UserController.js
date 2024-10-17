@@ -141,7 +141,7 @@ export class UserController {
     try {
       console.log("whyat")
       const user = await UserModel.findOne({ username: req.body.username })
-      console.log(user)
+      console.log(user.images)
       res.json(user.images)
     } catch (error) {
       console.log(error)
