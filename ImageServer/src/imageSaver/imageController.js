@@ -33,6 +33,7 @@ class ImageController {
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(helmet())
     app.use(bodyParser.json())
+    app.use(express.json())
     const __filename = fileURLToPath(import.meta.url)
     const __dirname = path.dirname(__filename)
     app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))

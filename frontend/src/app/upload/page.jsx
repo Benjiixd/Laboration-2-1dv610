@@ -28,17 +28,19 @@ class ImageController {
         }
     }
 
-    async addImage(formData) {
+    async addImage(data) {
         try {
-            console.log(formData)
             const response = await fetch("http://localhost:3020/users/addImage", {
                 method: "POST",
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
             });
             if (response.ok) {
                 const result = await response.json();
                 console.log("Data submitted successfully", result);
-                return result
+                return result;
             } else {
                 console.error("Server error:", response.statusText);
                 return null;
@@ -71,11 +73,12 @@ export default function Page() {
         console.log(upload)
         if (upload) {
             console.log("Image uploaded successfully");
-            await imageHandler.delay(5000);
-            const formData = new FormData();
-            formData.append("imageId", upload);
-            formData.append("username", "ben")
-            const add = await imageHandler.addImage(formData);
+            await imageHandler.delay(2000);
+            const data = {
+                imageId: upload,
+                username: "ben",
+            };
+            const add = await imageHandler.addImage(data);
             console.log(add)
             if (add) {
                 console.log("Image added successfully");

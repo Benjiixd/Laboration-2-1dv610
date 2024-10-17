@@ -106,10 +106,14 @@ export class UserController {
     try {
       console.log('addImage')
       const { username, imageId } = req.body
+      console.log(req.body)
       if (!username || !imageId) {
+        console.log('Missing required fields')
+        console.log(username)
+        console.log(imageId)
         return res.status(400).send('Missing required fields')
       }
-
+      console.log('addImage')
       const user = await UserModel.findOne({ username })
       if (!user) {
         return res.status(404).send('User not found')
@@ -117,9 +121,11 @@ export class UserController {
 
       user.images.push(imageId)
       await user.save()
+      
 
-      const updated = await UserModel.findOne({ username })
-      res.send(updated)
+     
+      console.log(user)
+      res.send(user)
     } catch (error) {
       console.log(error)
       res.status(500).send(error)
