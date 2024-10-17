@@ -76,7 +76,7 @@ export default function Page() {
             await imageHandler.delay(2000);
             const data = {
                 imageId: upload,
-                username: "ben",
+                username: "admin",
             };
             const add = await imageHandler.addImage(data);
             console.log(add)
