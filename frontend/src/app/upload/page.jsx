@@ -66,9 +66,10 @@ export default function Page() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append("name", name);
+        formData.append("title", name);
         formData.append("description", description);
         formData.append("file", file);
+        formData.append("owner", "admin");
         const upload = await imageHandler.postImage(formData);
         console.log(upload)
         if (upload) {

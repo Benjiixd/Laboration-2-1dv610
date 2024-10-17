@@ -8,7 +8,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-export default function ItemCard({ data }) {
+export default function ItemCard({ imageId }) {
     const [imageSrc, setImageSrc] = useState(null);
     const [metadata, setMetadata] = useState(null);
 
@@ -18,22 +18,18 @@ export default function ItemCard({ data }) {
 
         async function fetchImage() {
             try {
-                const response = await fetch(`http://localhost:3020/images/${data}`);
+                const response = await fetch(`http://localhost:3020/images/${imageId}`);
                 if (response.ok) {
                     // Access response headers
-                    const headers = response.headers;
-                    console.log('Headers:', headers.get('metadata'));
+                    const metadataHeader = response.headers.get('metadata');
+                    console.log('Headers:', metadataHeader);
 
                     // Extract metadata from headers
-                    const metadata = {
-                        contentType: headers.get('Content-Type'),
-                        customHeader: headers.get('metadata'),
-
-                        // Add more headers as needed
-                    };
+                    const parsedMetadata = metadataHeader ? JSON.parse(metadataHeader) : {};
+                    console.log('Metadata:', parsedMetadata);
 
                     if (isMounted) {
-                        setMetadata(metadata);
+                        setMetadata(parsedMetadata);
                     }
 
                     // Get image blob
@@ -60,13 +56,13 @@ export default function ItemCard({ data }) {
                 URL.revokeObjectURL(objectUrl);
             }
         };
-    }, [data.id]);
+    }, [imageId]);
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle>{data.name || 'Title'}</CardTitle>
-                <CardDescription>{data.description || 'Description'}</CardDescription>
+                <CardTitle>{metadata?.title || 'Title'}</CardTitle>
+                <CardDescription>{metadata?.description || 'Description'}</CardDescription>
             </CardHeader>
             <CardContent>
                 {imageSrc ? (
@@ -74,18 +70,17 @@ export default function ItemCard({ data }) {
                         src={imageSrc}
                         width={200}
                         height={200}
-                        alt={data.alt || 'Image'}
+                        alt={metadata?.description || 'Image'}
                     />
                 ) : (
                     <p>Loading image...</p>
                 )}
             </CardContent>
             <CardFooter>
-                <p>Status: {data.status || 'Status'}</p>
+                <p>Status: {metadata?.isDirty ? 'Dirty' : 'Clean'}</p>
                 {metadata && (
                     <div>
-                        <p>Content-Type: {metadata.contentType}</p>
-                        <p>Custom Header: {metadata.customHeader}</p>
+                        <p>Content-Type: {metadata.mimetype}</p>
                         {/* Display more metadata as needed */}
                     </div>
                 )}

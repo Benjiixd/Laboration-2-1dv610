@@ -139,8 +139,12 @@ export class UserController {
    */
   async get (req, res) {
     try {
-      console.log("whyat")
+      console.log(req.body.username)
       const user = await UserModel.findOne({ username: req.body.username })
+      if (!user) {
+        console.log('User not found')
+        return res.status(404).send('User not found')
+      }
       console.log(user.images)
       res.json(user.images)
     } catch (error) {

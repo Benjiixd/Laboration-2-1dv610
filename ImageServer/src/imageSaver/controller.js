@@ -23,7 +23,7 @@ export class Controller {
       }
       const data = await this.saver.saveImage(file, metadata)
       console.log(`Saved data: ${JSON.stringify(data)}`)
-      res.status(200).json({ data_id: data.id });
+      res.status(200).json({ data_id: data.id })
     } catch (err) {
       console.error(err)
       res.status(500).send('Internal server error')
@@ -43,8 +43,8 @@ export class Controller {
     try {
       console.log('gello')
       const data = await this.saver.getImage(req.params.id)
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); // Replace with your client origin
-    res.setHeader('Access-Control-Expose-Headers', 'metadata');
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000') // Replace with your client origin
+      res.setHeader('Access-Control-Expose-Headers', 'metadata')
       res.setHeader('Content-Type', data.metadata.mimetype)
       res.setHeader('metadata', JSON.stringify(data.metadata))
       data.image.pipe(res)
@@ -89,7 +89,7 @@ export class Controller {
   async getMetadata (req, res) {
     try {
       const fileId = req.body.fileId
-      
+
       if (!fileId) {
         res.status(400).send('No image ID provided')
       }
