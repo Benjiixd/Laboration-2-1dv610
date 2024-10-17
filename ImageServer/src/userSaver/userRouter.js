@@ -10,7 +10,7 @@ export const router = express.Router()
 
 const controller = new UserController()
 
-router.get('/', (req, res, next) => controller.get(req, res, next))
+router.post('/images', (req, res, next) => controller.get(req, res, next))
 
 router.post('/create', (req, res, next) => controller.create(req, res, next))
 

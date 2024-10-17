@@ -18,7 +18,8 @@ export class Controller {
       const metadata = {
         title: req.body.title,
         description: req.body.description,
-        owner: req.body.owner
+        owner: req.body.owner,
+        isDirty: false
       }
       const data = await this.saver.saveImage(file, metadata)
       console.log(`Saved data: ${JSON.stringify(data)}`)

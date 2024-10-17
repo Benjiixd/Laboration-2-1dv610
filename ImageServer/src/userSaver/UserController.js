@@ -97,6 +97,11 @@ export class UserController {
     }
   }
 
+  /**
+   *
+   * @param req
+   * @param res
+   */
   async addImage (req, res) {
     try {
       console.log('addImage')
@@ -119,5 +124,22 @@ export class UserController {
       console.log(error)
       res.status(500).send(error)
     }
-}
+  }
+
+  /**
+   *
+   * @param req
+   * @param res
+   */
+  async get (req, res) {
+    try {
+      console.log("whyat")
+      const user = await UserModel.findOne({ username: req.body.username })
+      console.log(user)
+      res.json(user.images)
+    } catch (error) {
+      console.log(error)
+      res.status(500).send(error)
+    }
+  }
 }
