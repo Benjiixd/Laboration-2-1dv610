@@ -6,38 +6,29 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import Image from "next/image";
 
-class ItemCardController {
-    constructor() {
-        this.Image
-        this.Name
-        this.Description
-        this.Status
-    }
 
-    setStatus(status) {
-        this.Status = status
-    }
-}
-
-export default function ItemCard({ item }) {
+export default function ItemCard({ data }) {
+    console.log("hello" + data);
     return (
         <Card>
             <CardHeader>
-                <CardTitle>green hoodie</CardTitle>
-                <CardDescription>hoodie</CardDescription>
+                <CardTitle>hello</CardTitle>
+                <CardDescription>world</CardDescription>
             </CardHeader>
             <CardContent>
-                <Image src={'/hoodieImage.jpg'}
+                <Image
+                    src={`http://localhost:3020/images/${data}`}
                     width={200}
                     height={200}
-                    alt="Picture of the author"></Image>
+                    alt={data}
+                />
             </CardContent>
             <CardFooter>
-                <p>DIRTY</p>
+                <p>first</p>
             </CardFooter>
         </Card>
     );
-    }
+}
