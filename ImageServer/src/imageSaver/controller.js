@@ -84,15 +84,15 @@ export class Controller {
    * @param {object} req request object.
    * @param {object} res response object.
    */
-  async update (req, res) {
+  async getMetadata (req, res) {
     try {
       const fileId = req.body.fileId
-      const file = req.file
+      
       if (!fileId) {
         res.status(400).send('No image ID provided')
       }
-      const data = await this.saver.updateImage(fileId, file)
-      res.status(200).send('Image updated with id: ' + data._id)
+      const data = await this.saver.getMetadata(req.params.id)
+      res.status(200).json(data)
     } catch (err) {
       console.error(err)
       res.status(500).send('Internal server error')

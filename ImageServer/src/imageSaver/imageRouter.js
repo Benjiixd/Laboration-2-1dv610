@@ -11,3 +11,4 @@ router.post('/', upload.single('file'), (req, res, next) => controller.post(req,
 router.get('/:id', (req, res, next) => controller.get(req, res))
 router.delete('/:id', (req, res, next) => controller.delete(req, res))
 router.post('/update', upload.single('file'), (req, res, next) => controller.update(req, res))
+router.get('/metadata/:id', (req, res, next) => controller.getMetadata(req, res))
