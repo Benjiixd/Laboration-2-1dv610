@@ -58,6 +58,35 @@ export default function ItemCard({ imageId }) {
         };
     }, [imageId]);
 
+    // Function to handle status change
+    const handleStatusChange = async () => {
+        if (!metadata || !metadata.id) {
+            console.error('Metadata or metadata.id is missing');
+            return;
+        }
+        try {
+            const response = await fetch('http://localhost:3020/images/changeIsDirty', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: metadata.id }),
+            });
+            if (response.ok) {
+                // Toggle the isDirty status in the state
+                setMetadata((prevMetadata) => ({
+                    ...prevMetadata,
+                    isDirty: !prevMetadata.isDirty,
+                }));
+                console.log('Status changed successfully');
+            } else {
+                console.error('Failed to change status:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error changing status:', error);
+        }
+    };
+
     return (
         <Card>
             <CardHeader>
@@ -77,13 +106,9 @@ export default function ItemCard({ imageId }) {
                 )}
             </CardContent>
             <CardFooter>
-                <p>Status: {metadata?.isDirty ? 'Dirty' : 'Clean'}</p>
-                {metadata && (
-                    <div>
-                        <p>Content-Type: {metadata.mimetype}</p>
-                        {/* Display more metadata as needed */}
-                    </div>
-                )}
+                <button onClick={handleStatusChange}>
+                    {metadata?.isDirty ? 'Mark as Clean' : 'Mark as Dirty'}
+                </button>
             </CardFooter>
         </Card>
     );

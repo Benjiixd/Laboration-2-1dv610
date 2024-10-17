@@ -80,24 +80,23 @@ export class Controller {
     }
   }
 
-  /**
-   * Function to update an image.
-   *
-   * @param {object} req request object.
-   * @param {object} res response object.
-   */
-  async getMetadata (req, res) {
+  async changeIsDirty (req, res) {
     try {
-      const fileId = req.body.fileId
-
+      const fileId = req.body.id
       if (!fileId) {
-        res.status(400).send('No image ID provided')
+        return res.status(400).send('No image ID provided')
       }
-      const data = await this.saver.getMetadata(req.params.id)
-      res.status(200).json(data)
+
+      const result = await this.saver.changeIsDirty(fileId)
+      if (result === 1) {
+        console.log('Image updated successfully')
+        return res.status(200).send('Image updated successfully')
+      } else {
+        return res.status(404).send('Image not found')
+      }
     } catch (err) {
-      console.error(err)
-      res.status(500).send('Internal server error')
+      console.error('Error in changeIsDirty:', err.message)
+      return res.status(404).send(err.message)
     }
   }
 }

@@ -56,7 +56,7 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <p>Hello world</p>
         {items.map((item, index) => (
-          <ItemCard key={index} data={item} />
+          <ItemCard key={index} imageId={item} />
         ))}
       </main>
     </div>

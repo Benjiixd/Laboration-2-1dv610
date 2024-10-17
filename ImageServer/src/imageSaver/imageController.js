@@ -182,25 +182,40 @@ class ImageController {
     }
   }
 
-  async getMetadata (fileId) {
-    try {
-      if (!fileId) {
-        throw new Error('No image ID provided')
-      }
-
-      // Find the image document in MongoDB
-      const image = await this.Model.findOne({ fileId: fileId.toString() })
-      if (!image) {
-        throw new Error('Image not found in MongoDB')
-      }
-
-      // Return the metadata
-      return image.metadata
-    } catch (err) {
-      console.error('Error in getMetadata:', err.message)
-      throw err
+async changeIsDirty(fileId) {
+  try {
+    console.log("changing");
+    if (!fileId) {
+      throw new Error('No image ID provided');
     }
+
+    // BENEATH IS MADE WITH CHATGPT CAUSE WTF IS THAT
+    const image = await this.Model.findOneAndUpdate(
+      { fileId: fileId.toString() },
+      [
+        {
+          $set: {
+            'metadata.isDirty': { $not: '$metadata.isDirty' },
+          },
+        },
+      ],
+      { new: true }
+    );
+
+    if (!image) {
+      throw new Error('Image not found in MongoDB');
+    }
+
+    console.log('isDirty changed:', image.metadata.isDirty);
+    return 1; // Return success
+  } catch (err) {
+    console.error('Error in changeIsDirty:', err.message);
+    throw err;
   }
+}
+    
+
+
 }
 
 export { ImageController }
