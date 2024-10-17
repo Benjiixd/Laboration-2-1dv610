@@ -1,7 +1,9 @@
 "use client";
 
+import { useNameFromToken } from "@/lib/tokenReader";
 import { useEffect, useState } from "react";
 import ItemCard from "@/components/itemComponent/itemCard";
+import Cookies from "js-cookie";
 // COMMENT THIS BENEATH IS MAINLY WRITTEN BY CHATGPT BECAUSE IT WAS FUCKED
 export default function Home() {
   const [items, setItems] = useState([]);
@@ -47,7 +49,9 @@ export default function Home() {
 
   // useEffect to fetch items when the component mounts
   useEffect(() => {
-    getItemsFromApi("admin");
+    const authStatus = Cookies.get("auth-status");
+    const username = useNameFromToken(authStatus);
+    getItemsFromApi(username);
   }, []); // Empty dependency array ensures this runs once after component mounts
 
   console.log("items2:", items);

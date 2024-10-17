@@ -4,9 +4,13 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import Cookies from "js-cookie";
+import { useNameFromToken } from "@/lib/tokenReader";
 
 class ImageController {
     constructor() {
+        const authStatus = Cookies.get("auth-status");
+        this.username = useNameFromToken(authStatus);
     }
 
     async postImage(formData) {
@@ -69,7 +73,8 @@ export default function Page() {
         formData.append("title", name);
         formData.append("description", description);
         formData.append("file", file);
-        formData.append("owner", "admin");
+        
+        formData.append("owner", imageHandler.username);
         const upload = await imageHandler.postImage(formData);
         console.log(upload)
         if (upload) {
@@ -77,7 +82,7 @@ export default function Page() {
             await imageHandler.delay(2000);
             const data = {
                 imageId: upload,
-                username: "admin",
+                username: imageHandler.username,
             };
             const add = await imageHandler.addImage(data);
             console.log(add)

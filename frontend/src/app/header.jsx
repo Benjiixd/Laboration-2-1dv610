@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import Cookies from "js-cookie";
+import { useNameFromToken } from "@/lib/tokenReader";
 
 export default function Header() {
     const pathname = usePathname() === '/' ? 'Home' : usePathname().charAt(1).toUpperCase() + usePathname().slice(2);
@@ -13,17 +14,15 @@ export default function Header() {
     useEffect(() => {
         // Fetch the auth-status cookie when the component mounts
         const authStatus = Cookies.get('auth-status');
-
-        if (authStatus) {
+        if (authStatus) 
             try {
-                const parsedAuthStatus = JSON.parse(authStatus); // Parse the JSON string
-                if (parsedAuthStatus && parsedAuthStatus.username) {
-                    setUsername(parsedAuthStatus.username); // Set the username in the state
-                }
+                    const username = useNameFromToken(authStatus); // Parse the JSON string
+                    setUsername(username); // Set the username in the state
+                
             } catch (error) {
                 console.error('Error parsing auth-status cookie:', error);
             }
-        }
+        
     }, []);
 
     return (
