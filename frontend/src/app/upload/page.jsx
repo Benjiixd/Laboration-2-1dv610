@@ -21,7 +21,6 @@ class ImageController {
             });
             if (response.ok) {
                 const result = await response.json();
-                console.log("Data submitted successfully", result.data_id);
                 return result.data_id;
             } else {
                 console.error("Server error:", response.statusText);
@@ -43,7 +42,6 @@ class ImageController {
             });
             if (response.ok) {
                 const result = await response.json();
-                console.log("Data submitted successfully", result);
                 return result;
             } else {
                 console.error("Server error:", response.statusText);
@@ -53,13 +51,10 @@ class ImageController {
             console.error("Network error:", error);
         }
     }
-
+    
     async delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-
-
-
 }
 
 export default function Page() {  
@@ -73,31 +68,24 @@ export default function Page() {
         const formData = new FormData();
         formData.append("title", name);
         formData.append("description", description);
-        formData.append("file", file);
-        
+        formData.append("file", file);        
         formData.append("owner", imageHandler.username);
         const upload = await imageHandler.postImage(formData);
-        console.log(upload)
         if (upload) {
-            console.log("Image uploaded successfully");
             await imageHandler.delay(2000);
             const data = {
                 imageId: upload,
                 username: imageHandler.username,
             };
             const add = await imageHandler.addImage(data);
-            console.log(add)
             if (add) {
-                console.log("Image added successfully");
                 router.push("/");
             } else {
                 console.error("Image add failed");
             }
         } else {
             console.error("Image upload failed");
-        }
-
-        
+        }        
     };
 
     return (

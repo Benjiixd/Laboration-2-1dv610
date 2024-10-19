@@ -8,29 +8,21 @@ import { useNameFromToken } from "@/lib/tokenReader";
 
 export default function Header() {
     const pathname = usePathname() === '/' ? 'Home' : usePathname().charAt(1).toUpperCase() + usePathname().slice(2);
-
     const [username, setUsername] = useState(null); // Store the username
-
     useEffect(() => {
-        // Fetch the auth-status cookie when the component mounts
         const authStatus = Cookies.get('auth-status');
         if (authStatus) 
             try {
-                    const username = useNameFromToken(authStatus); // Parse the JSON string
-                    setUsername(username); // Set the username in the state
-                
+                setUsername(useNameFromToken(authStatus)); // Set the username in the state                
             } catch (error) {
                 console.error('Error parsing auth-status cookie:', error);
-            }
-        
+            }        
     }, []);
-
     return (
         <header className="flex items-center justify-between w-full p-8 bg-#e5e7eb">
             <Link href="/upload">
                 <h1 className="text-2xl font-bold">UPLOAD</h1>
-            </Link>
-            
+            </Link>           
             <nav className="flex gap-4">
                 <Link href="/">
                     <p className="text-2xl font-bold cursor-pointer">{pathname}</p> {}

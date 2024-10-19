@@ -8,8 +8,6 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import AuthTabs from "@/app/account/components/AuthTabs";
-import { set } from 'date-fns';
-
 
 const schemas = {
     signInSchema: z.object({
@@ -70,14 +68,14 @@ export default function ProfileForm() {
             });
             const result = response.status
             console.log(result)
-            if (result === 200){
+            if (result === 200) {
                 window.location.reload()
             }
             if (result !== 200) {
                 console.log("Error")
-                
+
             }
-            
+
         } catch (error) {
             console.error('Error:', error);
         }

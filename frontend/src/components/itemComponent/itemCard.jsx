@@ -13,6 +13,28 @@ export default function ItemCard({ imageId }) {
     const [imageSrc, setImageSrc] = useState(null);
     const [metadata, setMetadata] = useState(null);
 
+    const handleStatusChange = async () => {
+        try {
+            const response = await fetch('http://localhost:3020/images/changeIsDirty', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: metadata.id }),
+            });
+            if (response.ok) {
+                setMetadata((prevMetadata) => ({
+                    ...prevMetadata,
+                    isDirty: !prevMetadata.isDirty,
+                }));
+            } else {
+                console.error('Failed to change status:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error changing status:', error);
+        }
+    };
+
     useEffect(() => {
         let isMounted = true;
         let objectUrl;
@@ -21,22 +43,13 @@ export default function ItemCard({ imageId }) {
             try {
                 const response = await fetch(`http://localhost:3020/images/${imageId}`);
                 if (response.ok) {
-                    // Access response headers
                     const metadataHeader = response.headers.get('metadata');
-                    console.log('Headers:', metadataHeader);
-
-                    // Extract metadata from headers
                     const parsedMetadata = metadataHeader ? JSON.parse(metadataHeader) : {};
-                    console.log('Metadata:', parsedMetadata);
-
                     if (isMounted) {
                         setMetadata(parsedMetadata);
                     }
-
-                    // Get image blob
                     const blob = await response.blob();
                     objectUrl = URL.createObjectURL(blob);
-
                     if (isMounted) {
                         setImageSrc(objectUrl);
                     }
@@ -48,9 +61,8 @@ export default function ItemCard({ imageId }) {
             }
         }
 
-        fetchImage();
 
-        // Cleanup function to revoke the object URL
+        fetchImage();
         return () => {
             isMounted = false;
             if (objectUrl) {
@@ -58,35 +70,6 @@ export default function ItemCard({ imageId }) {
             }
         };
     }, [imageId]);
-
-    // Function to handle status change
-    const handleStatusChange = async () => {
-        if (!metadata || !metadata.id) {
-            console.error('Metadata or metadata.id is missing');
-            return;
-        }
-        try {
-            const response = await fetch('http://localhost:3020/images/changeIsDirty', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id: metadata.id }),
-            });
-            if (response.ok) {
-                // Toggle the isDirty status in the state
-                setMetadata((prevMetadata) => ({
-                    ...prevMetadata,
-                    isDirty: !prevMetadata.isDirty,
-                }));
-                console.log('Status changed successfully');
-            } else {
-                console.error('Failed to change status:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error changing status:', error);
-        }
-    };
 
     return (
         <Card>
