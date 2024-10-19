@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import AuthTabs from "@/app/account/components/AuthTabs";
+import { set } from 'date-fns';
 
 
 const schemas = {
@@ -60,6 +61,7 @@ export default function ProfileForm() {
     };
 
     const onCreate = async (data) => {
+        console.log("CRTEATE")
         try {
             const response = await fetch('http://localhost:3020/users/create', {
                 method: 'POST',
@@ -68,8 +70,12 @@ export default function ProfileForm() {
             });
             const result = response.status
             console.log(result)
-            if (result.ok){
-                window.location.reload();
+            if (result === 200){
+                window.location.reload()
+            }
+            if (result !== 200) {
+                console.log("Error")
+                
             }
             
         } catch (error) {

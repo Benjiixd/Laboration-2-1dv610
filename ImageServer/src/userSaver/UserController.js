@@ -42,7 +42,7 @@ export class UserController {
       // Process the data (e.g., save to the database)
       // For demonstration, we are just sending a success message
 
-      res.send(`User created: ${newUser}`)
+      res.status(200).send(`User created: ${newUser}`)
     } catch (error) {
       res.status(500).send(error)
     }
