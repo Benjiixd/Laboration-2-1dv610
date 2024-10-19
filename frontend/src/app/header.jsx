@@ -32,11 +32,11 @@ export default function Header() {
             </Link>
             
             <nav className="flex gap-4">
-                <Link href="/test">
-                    <p className="text-2xl font-bold cursor-pointer">{pathname}</p> {/* Changed to an <a> tag inside Link */}
+                <Link href="/">
+                    <p className="text-2xl font-bold cursor-pointer">{pathname}</p> {}
                 </Link>
             </nav>
-            <Link href={username ? "/profile" : "/account"}>
+            <Link href={username ? "/account" : "/account"}>
                 <h1 className="text-2xl font-bold">{username ? `Welcome, ${username}` : "LOGIN"}</h1>
             </Link>
         </header>

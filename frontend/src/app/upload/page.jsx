@@ -101,34 +101,36 @@ export default function Page() {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="grid w-full max-w-sm gap-4">
-            <div>
-                <Label htmlFor="name">Name</Label>
-                <Input
-                    id="name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-            </div>
-            <div>
-                <Label htmlFor="description">Description</Label>
-                <Input
-                    id="description"
-                    type="text"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                />
-            </div>
-            <div>
-                <Label htmlFor="picture">Picture</Label>
-                <Input
-                    id="picture"
-                    type="file"
-                    onChange={(e) => setFile(e.target.files[0])}
-                />
-            </div>
-            <Button type="submit">Submit</Button>
-        </form>
+        <div className="flex items-center justify-center min-h-screen">
+            <form onSubmit={handleSubmit} className="grid w-full max-w-sm gap-4">
+                <div>
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                        id="name"
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <Label htmlFor="description">Description</Label>
+                    <Input
+                        id="description"
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <Label htmlFor="picture">Picture</Label>
+                    <Input
+                        id="picture"
+                        type="file"
+                        onChange={(e) => setFile(e.target.files[0])}
+                    />
+                </div>
+                <Button type="submit">Submit</Button>
+            </form>
+        </div>
     );
 }
