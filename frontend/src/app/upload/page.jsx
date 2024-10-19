@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
 import { useNameFromToken } from "@/lib/tokenReader";
-
+import { useRouter } from "next/navigation";
 class ImageController {
     constructor() {
         const authStatus = Cookies.get("auth-status");
@@ -66,6 +66,7 @@ export default function Page() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [file, setFile] = useState(null);
+    const router = useRouter();
     const imageHandler = new ImageController();
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -88,6 +89,7 @@ export default function Page() {
             console.log(add)
             if (add) {
                 console.log("Image added successfully");
+                router.push("/");
             } else {
                 console.error("Image add failed");
             }
