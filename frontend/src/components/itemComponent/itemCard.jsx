@@ -7,6 +7,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default function ItemCard({ imageId }) {
     const [imageSrc, setImageSrc] = useState(null);
@@ -106,9 +107,12 @@ export default function ItemCard({ imageId }) {
                 )}
             </CardContent>
             <CardFooter>
-                <button onClick={handleStatusChange}>
-                    {metadata?.isDirty ? 'Mark as Clean' : 'Mark as Dirty'}
-                </button>
+                <Button
+                    onClick={handleStatusChange}
+                    className={metadata?.isDirty ? 'bg-red-500' : 'bg-green-500'}
+                >
+                    {metadata?.isDirty ? 'Dirty' : 'Clean'}
+                </Button>
             </CardFooter>
         </Card>
     );
