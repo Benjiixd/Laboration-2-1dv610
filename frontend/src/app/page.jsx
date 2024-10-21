@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ItemCard from "@/components/itemComponent/itemCard";
 import Cookies from "js-cookie";
 
+// TODO: Change the namings of mainly item.
 export default function Home() {
   const [items, setItems] = useState([]);
   const getItemsFromApi = async (username) => {
