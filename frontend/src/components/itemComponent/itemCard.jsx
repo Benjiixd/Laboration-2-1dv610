@@ -8,32 +8,12 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import ImageDisplay from "./ImageDisplay";
+import StatusButton from "./StatusButton";
 
 export default function ItemCard({ imageId }) {
     const [imageSrc, setImageSrc] = useState(null);
     const [metadata, setMetadata] = useState(null);
-
-    const handleStatusChange = async () => {
-        try {
-            const response = await fetch('http://localhost:3020/images/changeIsDirty', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id: metadata.id }),
-            });
-            if (response.ok) {
-                setMetadata((prevMetadata) => ({
-                    ...prevMetadata,
-                    isDirty: !prevMetadata.isDirty,
-                }));
-            } else {
-                console.error('Failed to change status:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error changing status:', error);
-        }
-    };
 
     useEffect(() => {
         let isMounted = true;
@@ -61,7 +41,6 @@ export default function ItemCard({ imageId }) {
             }
         }
 
-
         fetchImage();
         return () => {
             isMounted = false;
@@ -78,24 +57,10 @@ export default function ItemCard({ imageId }) {
                 <CardDescription>{metadata?.description || 'Description'}</CardDescription>
             </CardHeader>
             <CardContent>
-                {imageSrc ? (
-                    <img
-                        src={imageSrc}
-                        width={200}
-                        height={200}
-                        alt={metadata?.description || 'Image'}
-                    />
-                ) : (
-                    <p>Loading image...</p>
-                )}
+                <ImageDisplay imageSrc={imageSrc} description={metadata?.description} />
             </CardContent>
             <CardFooter>
-                <Button
-                    onClick={handleStatusChange}
-                    className={metadata?.isDirty ? 'bg-red-500' : 'bg-green-500'}
-                >
-                    {metadata?.isDirty ? 'Dirty' : 'Clean'}
-                </Button>
+                <StatusButton metadata={metadata} setMetadata={setMetadata} />
             </CardFooter>
         </Card>
     );
