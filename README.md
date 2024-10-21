@@ -18,6 +18,7 @@ Detta är en app som är gjord för att kunna ha en digital klädkammare, gjord 
 
 ## backend endpoints
 
+### imageSaver
 - Post:
     post till /images
     inkludera en fil, med namn "file"
@@ -34,9 +35,16 @@ Detta är en app som är gjord för att kunna ha en digital klädkammare, gjord 
 - changeIsDirty: 
 post till /changeIsDirty med id't i body'n.
 
+### userSaver
+
+- post:
+    
+
 # Frontend
 
 # Backend
+
+## ImageSaver
 
 ### importing
 
@@ -149,7 +157,8 @@ const schema = new mongoose.Schema({
 })
 ```
 
+## UserSaver
+
 # Bugs and issues
 
-# Bugs
 
