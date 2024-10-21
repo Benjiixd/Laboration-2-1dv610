@@ -21,6 +21,7 @@ const schemas = {
 };
 
 export default function ProfileForm() {
+    //set up router and hooks
     const router = useRouter();
     const [loginFailed, setLoginFailed] = useState(false);
     const [currentTab, setCurrentTab] = useState('signIn');
@@ -41,6 +42,8 @@ export default function ProfileForm() {
         }
     });
 
+
+    // Function that sends a POST request to the server to sign in the user
     const onSignIn = async (data) => {
         try {
             const response = await fetch('http://localhost:3020/users/login', {
@@ -57,9 +60,8 @@ export default function ProfileForm() {
             setLoginFailed(true);
         }
     };
-
+    // Function that sends a POST request to the server to create a new user
     const onCreate = async (data) => {
-        console.log("CRTEATE")
         try {
             const response = await fetch('http://localhost:3020/users/create', {
                 method: 'POST',
@@ -67,15 +69,9 @@ export default function ProfileForm() {
                 body: JSON.stringify(data),
             });
             const result = response.status
-            console.log(result)
             if (result === 200) {
                 window.location.reload()
             }
-            if (result !== 200) {
-                console.log("Error")
-
-            }
-
         } catch (error) {
             console.error('Error:', error);
         }

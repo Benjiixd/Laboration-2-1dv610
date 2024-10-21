@@ -13,6 +13,7 @@ class ImageController {
         this.username = useNameFromToken(authStatus);
     }
 
+    // Function that sends a POST request to the server to upload an image
     async postImage(formData) {
         try {
             const response = await fetch("http://localhost:3020/images", {
@@ -31,6 +32,7 @@ class ImageController {
         }
     }
 
+    // Function that sends a POST request to the server to add an image to a user
     async addImage(data) {
         try {
             const response = await fetch("http://localhost:3020/users/addImage", {
