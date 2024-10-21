@@ -37,7 +37,6 @@ class ImageController {
     const __filename = fileURLToPath(import.meta.url)
     const __dirname = path.dirname(__filename)
     app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
-
     // Return the app object
     return app
   }
@@ -47,13 +46,13 @@ class ImageController {
    * TODO: add a file type checker.
    *
    * @param { File } file the file to upload.
+   * @param { object } metadata the metadata to save with the image.
    * @returns { object } The saved image in the DB.
    */
   async saveImage (file, metadata) {
     if (!file) {
       throw new Error('No image provided')
     }
-
     // Create a new image object
     const newImage = new this.Model({
       filename: file.originalname,
@@ -61,32 +60,27 @@ class ImageController {
       size: file.size,
       uploadedAt: new Date(),
       updatedAt: new Date(),
-      metadata: metadata
+      metadata
     })
     const saved = await newImage.save()
-
     // Based of the new image object, create a new upload stream.
     const uploadStream = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
       bucketName: 'images'
     }).openUploadStreamWithId(newImage._id, file.originalname, {
       contentType: file.mimetype
     })
-
     // Read the file and pipe it to the upload stream in order to store it in the DB.
     const fileStream = fs.createReadStream(file.path)
     fileStream.pipe(uploadStream)
       .on('error', function (error) {
-        console.error('Error uploading to GridFS:', error)
+        throw new Error('Error uploading file:', error)
       })
       .on('finish', async function () {
-        console.log('File uploaded to GridFS with id:', newImage._id.toString())
         newImage.fileId = newImage._id.toString()
         await newImage.save()
         fs.unlink(file.path, (err) => {
           if (err) {
-            console.log('Error deleting local file:', err)
-          } else {
-            console.log('Local file deleted:', file.path)
+            throw new Error('Failed to delete file:', err)
           }
         })
       })
@@ -144,11 +138,9 @@ class ImageController {
         }
         return data
       } else {
-        console.log('Image not found')
         throw new Error('Image not found')
       }
     } catch (err) {
-      console.log(err)
       throw new Error('Image not found')
     }
   }
@@ -164,58 +156,50 @@ class ImageController {
       if (!fileId) {
         throw new Error('No image ID provided')
       }
-
       // Find the image document in MongoDB
       const image = await this.Model.findOne({ fileId: fileId.toString() })
       if (!image) {
         throw new Error('Image not found in MongoDB')
       }
-
       // Delete the image document from MongoDB
       await image.deleteOne()
-      console.log('Image deleted from MongoDB:', fileId)
-
       return 1 // Return success
     } catch (err) {
-      console.error('Error in deleteImage:', err.message)
-      throw err
+      throw new Error('Image not found in MongoDB')
     }
   }
 
-async changeIsDirty(fileId) {
-  try {
-    console.log("changing");
-    if (!fileId) {
-      throw new Error('No image ID provided');
+  /**
+   * Function to change the isDirty value of an image.
+   *
+   * @param { string } fileId The fileId of the image.
+   * @returns { number } 1 if the isDirty value was changed successfully.
+   */
+  async changeIsDirty (fileId) {
+    try {
+      if (!fileId) {
+        throw new Error('No image ID provided')
+      }
+      // the image call beneath is made with chatGPT
+      const image = await this.Model.findOneAndUpdate(
+        { fileId: fileId.toString() },
+        [
+          {
+            $set: {
+              'metadata.isDirty': { $not: '$metadata.isDirty' }
+            }
+          }
+        ],
+        { new: true }
+      )
+      if (!image) {
+        throw new Error('Image not found in MongoDB')
+      }
+      return 1 // Return success
+    } catch (err) {
+      throw new Error('Image not found in MongoDB')
     }
-
-    // BENEATH IS MADE WITH CHATGPT CAUSE WTF IS THAT
-    const image = await this.Model.findOneAndUpdate(
-      { fileId: fileId.toString() },
-      [
-        {
-          $set: {
-            'metadata.isDirty': { $not: '$metadata.isDirty' },
-          },
-        },
-      ],
-      { new: true }
-    );
-
-    if (!image) {
-      throw new Error('Image not found in MongoDB');
-    }
-
-    console.log('isDirty changed:', image.metadata.isDirty);
-    return 1; // Return success
-  } catch (err) {
-    console.error('Error in changeIsDirty:', err.message);
-    throw err;
   }
-}
-    
-
-
 }
 
 export { ImageController }

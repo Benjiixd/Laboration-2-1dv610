@@ -13,7 +13,6 @@ export class Controller {
    */
   async post (req, res) {
     try {
-      console.log(`Received data: ${JSON.stringify(req.body)}`)
       const file = req.file
       const metadata = {
         title: req.body.title,
@@ -22,10 +21,8 @@ export class Controller {
         isDirty: false
       }
       const data = await this.saver.saveImage(file, metadata)
-      console.log(`Saved data: ${JSON.stringify(data)}`)
       res.status(200).json({ data_id: data.id })
     } catch (err) {
-      console.error(err)
       res.status(500).send('Internal server error')
     }
   }
@@ -41,7 +38,6 @@ export class Controller {
       res.status(400).send('No image ID provided')
     }
     try {
-      console.log('gello')
       const data = await this.saver.getImage(req.params.id)
       res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000') // Replace with your client origin
       res.setHeader('Access-Control-Expose-Headers', 'metadata')
@@ -49,7 +45,6 @@ export class Controller {
       res.setHeader('metadata', JSON.stringify(data.metadata))
       data.image.pipe(res)
     } catch (err) {
-      console.error(err)
       res.status(404).send('Image not found')
     }
   }
@@ -67,7 +62,6 @@ export class Controller {
       if (!fileId) {
         return res.status(400).send('No image ID provided')
       }
-
       const result = await this.saver.deleteImage(fileId)
       if (result === 1) {
         return res.status(200).send('Image deleted successfully')
@@ -75,27 +69,30 @@ export class Controller {
         return res.status(404).send('Image not found')
       }
     } catch (err) {
-      console.error('Error in delete:', err.message)
       return res.status(404).send(err.message)
     }
   }
 
+  /**
+   * Function to change the isDirty status of an image.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @returns {object} response object.
+   */
   async changeIsDirty (req, res) {
     try {
       const fileId = req.body.id
       if (!fileId) {
         return res.status(400).send('No image ID provided')
       }
-
       const result = await this.saver.changeIsDirty(fileId)
       if (result === 1) {
-        console.log('Image updated successfully')
         return res.status(200).send('Image updated successfully')
       } else {
         return res.status(404).send('Image not found')
       }
     } catch (err) {
-      console.error('Error in changeIsDirty:', err.message)
       return res.status(404).send(err.message)
     }
   }

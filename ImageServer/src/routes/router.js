@@ -14,4 +14,3 @@ router.use('*', (req, res, next) => {
   error.status = statusCode
   next(error)
 })
-
