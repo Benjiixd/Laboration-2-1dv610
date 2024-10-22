@@ -1,62 +1,61 @@
 # Laboration-3-1dv610
 
-Laboration 3, en app
+Laboration 3, an app
 
-## Beskrivning
+## Description
 
-Detta är en app som är gjord för att kunna ha en digital klädkammare, gjord för folk som mig, som på grund av sin sambo måste ha alla sina kläder i tryckta i en låda...
+This is an app designed to serve as a digital wardrobe, created for people like me, who, due to their partner, have to keep all their clothes stuffed into a drawer...
 
 ## Installation
 
-- clonea repot
-- öppna upp två terminaler inom repot
-- byt ena terminalen till /frontend och andra till /imagesaver
-- kör npm i i bägge terminalerna
-- i /imagesaver, kör npm run start
-- i frontend, kör npm run build, följt av npm run start
-- se till att frontend servern körs på localhost:3000
-- öppna upp localhost:3000 i en webläsare och använd programmet
+- Clone the repository
+- Open two terminals within the repository
+- Switch one terminal to the `/frontend` directory and the other to `/imagesaver`
+- Run `npm i` in both terminals
+- In `/imagesaver`, run `npm run start`
+- In `/frontend`, run `npm run build`, followed by `npm run start`
+- Ensure that the frontend server is running on localhost:3000
+- Open localhost:3000 in a web browser and use the app
 
-## backend endpoints
+## Backend Endpoints
 
-### imageSaver
+### ImageSaver
 
-- Post:
-    post till /images
-    inkludera en fil, med namn "file"
-    postea
+- **Post**:
+  - Post to `/images`
+  - Include a file with the name "file"
+  - Post the request
 
-- Get:
-    get till /images/:id
-    byt ut ":id" till id't du vill få
-    skicka request
+- **Get**:
+  - Send a GET request to `/images/:id`
+  - Replace ":id" with the ID of the image you want to retrieve
+  - Send the request
 
-- Delete:
- delete till /images/:id till id't för att ta bort det.
+- **Delete**:
+  - Send a DELETE request to `/images/:id` with the ID of the image you want to delete
 
-- Post:
-post till /images/changeIsDirty med id't i body'n.
+- **Post**:
+  - Post to `/images/changeIsDirty` with the image ID in the body.
 
-### userSaver
+### UserSaver
 
-- post: post till /users/images ger en användares bilder
+- **Post**: Send a POST request to `/users/images` to retrieve a user's images
 
-- post: post till /users/create med ett "username" och ett "password" skapar ett nytt konto
+- **Post**: Send a POST request to `/users/create` with a "username" and a "password" to create a new account
 
-- post: post till /users/login med ett "username" och ett "password" loggar in en användare genom att svara med en JWT
+- **Post**: Send a POST request to `/users/login` with a "username" and a "password" to log in a user. The server responds with a JWT
 
-- post: post till /users/verify verifierar en JWT
+- **Post**: Send a POST request to `/users/verify` to verify a JWT
 
-- post: post till /users/addimage med "username" och "imageid" i body'n, lägger till en bild till en avändare.
+- **Post**: Send a POST request to `/users/addimage` with "username" and "imageid" in the body to add an image to a user.
 
 ## Frontend
 
-The frontend consists of a nextJS project using react. The frontend barely does anything other than display buttons and such, and lets the backend take care of all the validation of requests and such.
+The frontend consists of a Next.js project using React. The frontend mainly displays buttons and leaves validation and other tasks to the backend.
 
-The one time the frontend application takes care of something important is verifying a jwt, this is done in the middleware.js file:
+The one important function handled by the frontend is JWT verification, which is done in the `middleware.js` file:
 
 ```javascript
-
 import { NextResponse } from 'next/server';
 import { jwtVerify, importSPKI } from 'jose';
 
@@ -97,103 +96,96 @@ export default async function middleware(req) {
 }
 ```
 
-Aswell as in the tokenReader.js, that makes it easier to get a username from a token:
+Also in `tokenReader.js`, which helps extract a username from a token:
 
-``` javascript
+```javascript
 export function getNameFromToken(token) {
   try {
-                const parsedAuthStatus = JSON.parse(token); // Parse the JSON string
-                if (parsedAuthStatus && parsedAuthStatus.username) {
-                    const username = parsedAuthStatus.username;
-                    return username
-                }
-            } catch (error) {
-                console.error('Error parsing auth-status cookie:', error);
-            }
-
+    const parsedAuthStatus = JSON.parse(token); // Parse the JSON string
+    if (parsedAuthStatus && parsedAuthStatus.username) {
+      const username = parsedAuthStatus.username;
+      return username;
+    }
+  } catch (error) {
+    console.error('Error parsing auth-status cookie:', error);
+  }
 }
 ```
 
-Other than that, the frontend really is just, a frontend.
+Other than this, the frontend is mainly a simple interface.
 
 ## Backend
 
-The backend consists of two different "apps" of their own, these are located in the folders ImageSaver, and UserSaver.
+The backend consists of two separate "apps," which are located in the folders `ImageSaver` and `UserSaver`.
 
-The ImageSaver is from the previous assigment and is still the module, with a couple of tweaks since last time.
+The `ImageSaver` comes from the previous assignment and is mostly the same module, with a few tweaks.
 
-The UserSaver is a endpoint that is mainly handles Users, by creating, authenticating and changing users.
+The `UserSaver` endpoint is primarily responsible for creating, authenticating, and managing users.
 
 ## ImageSaver
 
-### importing
+### Importing
 
 ```javascript
-import { ImageController } from '../imageSaver/imageController.js'
-import { imageModel } from '../imageSaver/imageModel.js'
-
+import { ImageController } from '../imageSaver/imageController.js';
+import { imageModel } from '../imageSaver/imageModel.js';
 ```
 
-### creating a controller object
+### Creating a controller object
 
-Note: a moongoose object needs to have been connected already before use
-
-made so that you easily can make sure your app is correctly set before use
+Note: A mongoose object needs to be connected before use. This setup ensures that your app is properly configured.
 
 ```javascript
-const controller = new ImageController(ImageModel)
-const app = controller.initializeApp() // initiziates a express app to use
+const controller = new ImageController(ImageModel);
+const app = controller.initializeApp(); // Initializes an express app for use
 ```
 
-### Upload a image to the database
+### Upload an image to the database
 
 ```javascript
-const file = req.body.file //aslong as its a file it will work
+const file = req.body.file; // As long as it's a file, it will work
 const metadata = {
-    req.body.title
-    req.body.description
-    owner: req.body.owner,
-    isDirty: false
-}
-const data = controller.saveImage(file, metadata)
-console.log(data) //the new saved object
+  title: req.body.title,
+  description: req.body.description,
+  owner: req.body.owner,
+  isDirty: false
+};
+const data = controller.saveImage(file, metadata);
+console.log(data); // The newly saved object
 ```
 
-### get a image from the database
+### Retrieve an image from the database
 
 ```javascript
-const fileId = req.params.fileId
-const data = controller.getImage(fileId)
-res.setHeader('metadata', JSON.stringify(data.metadata)) // sets a header with the metadata
-data.image.pipe(res)// sends the image to the client
+const fileId = req.params.fileId;
+const data = controller.getImage(fileId);
+res.setHeader('metadata', JSON.stringify(data.metadata)); // Sets a header with the metadata
+data.image.pipe(res); // Sends the image to the client
 
-// or if you want to use the imageFile again
-
-const image = data.image
-
+// Or if you want to reuse the image file
+const image = data.image;
 ```
 
-### Delete a image from the database
+### Delete an image from the database
 
 ```javascript
-const fileId = req.params.fileId
-const data = controller.deleteImage(fileId)
-console.log(data) //if successfull data = 1
-if (data == 1){
-    console.log("sucess")
-}
-else{
-    console.log("error")
+const fileId = req.params.fileId;
+const data = controller.deleteImage(fileId);
+console.log(data); // If successful, data = 1
+if (data === 1) {
+  console.log("Success");
+} else {
+  console.log("Error");
 }
 ```
 
-### Update isDirty
+### Update `isDirty`
 
 ```javascript
-const fileId = req.body.id
-const result = await this.saver.changeIsDirty(fileId)
+const fileId = req.body.id;
+const result = await this.saver.changeIsDirty(fileId);
 if (result === 1) {
-    return res.status(200).send('Image updated successfully')
+  return res.status(200).send('Image updated successfully');
 }
 ```
 
@@ -207,17 +199,17 @@ const schema = new mongoose.Schema({
     trim: true,
     minlength: 1
   },
-  fileId: { // The fileId thats connected to gridFS
+  fileId: { // The fileId linked to GridFS
     type: String,
     required: false
   },
-  mimetype: { // In other words the imageType
+  mimetype: { // Image type
     type: String,
     required: true,
     trim: true,
     minlength: 1
   },
-  size: { // the size in bytes
+  size: { // Size in bytes
     type: Number,
     required: true
   },
@@ -233,101 +225,100 @@ const schema = new mongoose.Schema({
     type: Object,
     required: false
   }
-        // Also the object contains a _id which is the object id, also the thing you search for in all of the method calls
-})
+});
 ```
 
 ## UserSaver
 
-Since the userSaver is never called by anything other than a api call, the fetches will be shown:
+Since `UserSaver` is only called by API requests, the fetch calls are shown below:
 
 ### Create a new user
 
 ```javascript
-        const onCreate = async (data) => {
-        try {
-            const response = await fetch('http://localhost:3020/users/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-            });
-            const result = response.status
-            if (result === 200) {
-                window.location.reload() // On success, reload the window to go to login
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
-```
-
-### Login a user
-
-```javascript
-        const onSignIn = async (data) => {
-        try {
-            const response = await fetch('http://localhost:3020/users/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-            });
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const responseData = await response.json();
-            Cookies.set('token', responseData.token); // Set the token as a cookie
-            router.push('/'); // Go to the homepage
-            setLoginFailed(false); // Set a hook to false
-        } catch (error) {
-            setLoginFailed(true);
-        }
-    };
-```
-
-### Add a image to a user
-
-```javascript
-        async addImage(data) {
-        try {
-            const response = await fetch("http://localhost:3020/users/addImage", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-            if (response.ok) {
-                const result = await response.json();
-                return result;
-            } else {
-                console.error("Server error:", response.statusText);
-                return null;
-            }
-        } catch (error) {
-            console.error("Network error:", error);
-        }
+const onCreate = async (data) => {
+  try {
+    const response = await fetch('http://localhost:3020/users/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (response.status === 200) {
+      window.location.reload(); // On success, reload to login page
     }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 ```
 
-### Get the images of a user
+### Log in a user
 
 ```javascript
-        try {
-      const response = await fetch("http://localhost:3020/users/images", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Setting the correct content type for JSON
-        },
-        body: JSON.stringify({ username }), // Send JSON payload
-      });
-      if (response.ok) {
-        const result = await response.json(); // Parse JSON response
-        setItems(result); // Update state with fetched items
-      } else {
-        console.error("Server error:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Network error:", error);
+const onSignIn = async (data) => {
+  try {
+    const response = await fetch('http://localhost:3020/users/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const responseData = await response.json();
+    Cookies.set('token', responseData.token); // Set token as cookie
+    router.push('/'); // Redirect to homepage
+    setLoginFailed(false); // Update state
+  } catch (error) {
+    setLoginFailed(true);
+  }
+};
+```
+
+### Add an image to a user
+
+```javascript
+async addImage(data) {
+  try {
+    const response = await fetch('http://localhost:3020/users/addImage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) {
+      const result = await response.json();
+      return result;
+    } else {
+      console.error('Server error:', response.statusText);
+      return null;
     }
+  } catch (error) {
+    console.error('Network error:', error);
+  }
+}
+```
+
+### Get a user's images
+
+```javascript
+try {
+  const response = await fetch('http://localhost:3020/users/images', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username }), // Send JSON payload
+  });
+  if (response.ok) {
+    const result = await response.json(); // Parse JSON response
+    setItems(result); // Update state with fetched items
+  } else {
+    console.error('Server error:', response.statusText);
+  }
+} catch (error) {
+  console.error('Network error:', error);
+
+
+}
 ```
 
 ### The user object
@@ -340,7 +331,6 @@ const schema = new mongoose.Schema({
     trim: true,
     minlength: 1
   },
-
   password: {
     type: String,
     required: true,
@@ -351,9 +341,9 @@ const schema = new mongoose.Schema({
     type: Array,
     required: false
   }
-})
+});
 ```
 
-## Bugs and issues
+## Bugs and Issues
 
-No bugs found as of this.
+No bugs found as of now.
