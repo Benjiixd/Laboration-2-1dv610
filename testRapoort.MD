@@ -21,25 +21,32 @@ Skriven av Benjamin Karlsson
     <td>TC1.1-2.2</td>
   </tr>
   <tr>
-    <td>En inloggad användare ska kunna ladda upp en bild, och se den</td>
+    <td>En inloggad användare ska kunna ladda upp en bild</td>
     <td>K</td>
     <td>N/A</td>
     <td></td>
-    <td>TC 3.1-4.2</td>
+    <td>TC 3.1</td>
   </tr>
   <tr>
     <td>Enbart bilder ska kunna laddas&nbsp;&nbsp;upp</td>
     <td>Ö</td>
     <td>3</td>
     <td></td>
-    <td>TC 5.2</td>
+    <td>TC 3.2</td>
   </tr>
   <tr>
     <td>En användare ska kunna se sina bilder</td>
     <td>K</td>
     <td>N/A</td>
     <td></td>
-    <td>TC 6.1-TC6.2</td>
+    <td>TC 4.1-TC4.2</td>
+  </tr>
+  <tr>
+    <td>En användare ska kunna ändra status på bilden</td>
+    <td>K</td>
+    <td>N/A</td>
+    <td></td>
+    <td>TC 5.1</td>
   </tr>
   <tr>
     <td>Koden skall följa code quality boken så mycket som möjligt</td>
@@ -57,7 +64,9 @@ Skriven av Benjamin Karlsson
   </tr>
 </tbody></table>
 
-## TC1.1 Let a user create a account
+## Test specification
+
+### TC1.1 Let a user create a account
 prerequsies: the frontend and backend apps must be running on the correct ports
 
 steps:
@@ -69,7 +78,7 @@ expected outcome:
 
 The user should be redirected to /account but with the login button
 
-## TC1.2 Dont let a user create fulty a account
+### TC1.2 Dont let a user create fulty a account
 
 prerequsies: the frontend and backend apps must be running on the correct ports
 
@@ -84,25 +93,9 @@ expected outcome:
 
 The user should be told to enter correct values
 
-## TC1.2 Let a user create a account
+### TC2.1 Let a user login to a account
 
 prerequsies: the frontend and backend apps must be running on the correct ports
-
-steps:
-
-- User navigates to /account
-- User presses the create button
-- User enters a faulty username and faulty password
-- user presses create
-
-expected outcome:
-
-The user should be redirected to /account but with the login button
-
-
-## TC2.1: Upload a image, and have it stored in a DB
-
-prerequsies: The module must be used in some sort of an app, like this test-app
 and the TC1.1 must have succeeded.
 
 steps:
@@ -114,103 +107,113 @@ expected outcome:
 
 - The user should be redirected to the home page, with their name in the top right corner
 
-## TC1.2 Try to store a non-file to the DB
+### TC2.2 Dont let a user login to a account without correct initials
 
-prerequsies: The module must be used in some sort of an app, like this test-app
-
-steps:
-
-- Do a post request to the root of the localhost
-- The post request should have a string, named file in the body
-- post
-
-expected outcome:
-
-- The response should be an error that something went wrong
-
-## TC2.1 Get a image from the DB
-
-prerequsies: The upload functionality must work
+prerequsies: the frontend and backend apps must be running on the correct ports
 
 steps:
 
-- Upload a file successfully
-- Copy the fileId that is returned
-- do a get request, to localhost:2020/fileId (change fileId to the actual id)
+- User navigates to /account
+- User enters a username and password that isnt correct
+- user presses sign in
 
 expected outcome:
 
-- A image file, with a header for metadata
+- The user should be redirected to the account page, with a text telling them something is wrong
 
-## TC2.2 try to get a non-existing image from the db
 
-prerequsies: none
+
+### TC3.1 Allow a user to upload a image
+prerequsies: the frontend and backend apps must be running on the correct ports
+and TC1.1 and TC2.1 must pass
 
 steps:
 
-- do a get request, to localhost:2020/23142142413
+- user navigates to /upload
+- user adds a title and description
+- user adds a image
+- user presses upload
 
 expected outcome:
 
-- An error saying it doesnt exist
+- The user will be redirected to the home page
 
-## TC3.1 delete a image from the db
+### TC3.2 Only allow a user to upload images
 
-prerequsies:
-
-- the upload file functionality must work
+prerequsies: the frontend and backend apps must be running on the correct ports
+and TC1.1 and TC2.1 must pass
 
 steps:
 
-- Upload a file successfully
-- Copy the fileId that is returned
-- do a delete request, to localhost:2020/fileId (change fileId to the actual id)
-- do a get request, to localhost:2020/fileId (change fileId to the actual id)
+- user navigates to /upload
+- user adds a title and description
+- user adds a video
+- user presses upload
 
 expected outcome:
 
-- The same result as in TC2.2
+- The user will be told to upload a image not a video
 
-## TC3.2 delete a non existing image from the db
+### TC4.1 Allow a user to see their images
 
-prerequsies:
+prerequsies: the frontend and backend apps must be running on the correct ports
+and TC1.1, TC2.1  and TC3.1 must pass
 
-steps:
+Steps:
 
-- do a delete request, to localhost:2020/23142142413
-
-expected outcome:
-
-- An error message should be responded with
-
-## TC4.1 edit a existing image in the db
-
-prerequsies: The upload file functionalty, and get file functionality must work
-
-steps:
-
-- Do a post request to the root of the localhost
-- The post request should have a image file, named file in the body
-- post
-- Do a post request to the localhost/edit
-- The post request should have a image file, named file in the body and a fileId in the body
-- The server should respond with sucess and the fileId
-- follow TC2.1
+- user logs in
+- user navigates to /
 
 expected outcome:
 
-- The image should have changed to the new one from the change request
+- The user will see their images
 
-## TC4.2 edit a non-existing image from the db
 
-prerequsies:
+### TC4.2 Dont show images if a user isnt logged in
 
-steps:
+prerequsies: the frontend and backend apps must be running on the correct ports
 
-- Do a post request to the localhost/edit
-- The post request should have a image file, named file in the body and a fileId in the body
-- the fileId should be something random, like 2654621321
+
+Steps:
+
+- user navigates to /
 
 expected outcome:
 
-- The server should say no file like that exists
+- The user will not see any images
+
+### TC5.1 Allow a user change status of their images
+
+prerequsies: the frontend and backend apps must be running on the correct ports
+and TC1.1, TC2.1, TC3.1 and TC4.1 must pass
+
+Steps:
+
+- user logs in
+- user navigates to /
+- user presses the button that says dirty or clean
+- user refreshes page
+
+expected outcome:
+
+- The status should be changed and saved
+
+## Automated test
+
+After starting both apps accourding to the README
+In the tester folder, write npm i
+then write npm run test
+
+A test and result will be shown
+
+
+
+## Results:
+
+### Kravspecifikation
+
+### Test cases
+
+### Automated test
+
+
