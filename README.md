@@ -19,6 +19,7 @@ Detta är en app som är gjord för att kunna ha en digital klädkammare, gjord 
 ## backend endpoints
 
 ### imageSaver
+
 - Post:
     post till /images
     inkludera en fil, med namn "file"
@@ -32,7 +33,7 @@ Detta är en app som är gjord för att kunna ha en digital klädkammare, gjord 
 - Delete:
  delete till /images/:id till id't för att ta bort det.
 
-- Post: 
+- Post:
 post till /images/changeIsDirty med id't i body'n.
 
 ### userSaver
@@ -46,9 +47,8 @@ post till /images/changeIsDirty med id't i body'n.
 - post: post till /users/verify verifierar en JWT
 
 - post: post till /users/addimage med "username" och "imageid" i body'n, lägger till en bild till en avändare.
-    
 
-# Frontend
+## Frontend
 
 The frontend consists of a nextJS project using react. The frontend barely does anything other than display buttons and such, and lets the backend take care of all the validation of requests and such.
 
@@ -112,10 +112,10 @@ export function useNameFromToken(token) {
 
 }
 ```
+
 Other than that, the frontend really is just, a frontend.
 
-
-# Backend
+## Backend
 
 The backend consists of two different "apps" of their own, these are located in the folders ImageSaver, and UserSaver.
 
@@ -242,7 +242,6 @@ Since the userSaver is never called by anything other than a api call, the fetch
 
 ### Create a new user
 
-
 ```javascript
         const onCreate = async (data) => {
         try {
@@ -354,8 +353,6 @@ const schema = new mongoose.Schema({
 })
 ```
 
+## Bugs and issues
 
-
-# Bugs and issues
-
-
+No bugs found as of this.
