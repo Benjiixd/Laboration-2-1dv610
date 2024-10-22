@@ -57,6 +57,7 @@ export default function ProfileForm() {
             router.push('/');
             setLoginFailed(false);
         } catch (error) {
+            window.location.reload();
             setLoginFailed(true);
         }
     };
