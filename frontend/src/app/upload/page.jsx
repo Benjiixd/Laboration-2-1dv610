@@ -5,12 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
-import { useNameFromToken } from "@/lib/tokenReader";
+import { getNameFromToken } from "@/lib/tokenReader";
 import { useRouter } from "next/navigation";
 class ImageController {
     constructor() {
         const authStatus = Cookies.get("auth-status");
-        this.username = useNameFromToken(authStatus);
+        this.username = getNameFromToken(authStatus);
     }
 
     // Function that sends a POST request to the server to upload an image

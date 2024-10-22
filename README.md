@@ -14,7 +14,8 @@ Detta är en app som är gjord för att kunna ha en digital klädkammare, gjord 
 - kör npm i i bägge terminalerna
 - i /imagesaver, kör npm run start
 - i frontend, kör npm run build, följt av npm run start
-- se till
+- se till att frontend servern körs på localhost:3000
+- öppna upp localhost:3000 i en webläsare och använd programmet
 
 ## backend endpoints
 
@@ -99,7 +100,7 @@ export default async function middleware(req) {
 Aswell as in the tokenReader.js, that makes it easier to get a username from a token:
 
 ``` javascript
-export function useNameFromToken(token) {
+export function getNameFromToken(token) {
   try {
                 const parsedAuthStatus = JSON.parse(token); // Parse the JSON string
                 if (parsedAuthStatus && parsedAuthStatus.username) {

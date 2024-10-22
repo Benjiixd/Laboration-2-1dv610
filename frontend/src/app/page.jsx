@@ -1,6 +1,6 @@
 "use client";
 
-import { useNameFromToken } from "@/lib/tokenReader";
+import { getNameFromToken } from "@/lib/tokenReader";
 import { useEffect, useState } from "react";
 import ItemCard from "@/components/itemComponent/itemCard";
 import Cookies from "js-cookie";
@@ -30,7 +30,7 @@ export default function Home() {
 
   useEffect(() => {
     const authStatus = Cookies.get("auth-status");
-    const username = useNameFromToken(authStatus);
+    const username = getNameFromToken(authStatus);
     getItemsFromApi(username);
   }, []);
   
