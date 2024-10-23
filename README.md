@@ -17,6 +17,68 @@ This is an app designed to serve as a digital wardrobe, created for people like 
 - Ensure that the frontend server is running on localhost:3000
 - Open localhost:3000 in a web browser and use the app
 
+## Kravspecifikation
+
+<table><thead>
+  <tr>
+    <th>Krav/Önskemål</th>
+    <th>K/Ö</th>
+    <th>Vikt</th>
+    <th>Kommentar</th>
+    <th>Test</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td>En användare ska kunna skapa ett konto och logga in</td>
+    <td>K</td>
+    <td>N/A</td>
+    <td>Ingen säkerhet bedömns inom kravet</td>
+    <td>TC1.1-2.2</td>
+  </tr>
+  <tr>
+    <td>En inloggad användare ska kunna ladda upp en bild</td>
+    <td>K</td>
+    <td>N/A</td>
+    <td></td>
+    <td>TC 3.1</td>
+  </tr>
+  <tr>
+    <td>Enbart bilder ska kunna laddas&nbsp;&nbsp;upp</td>
+    <td>Ö</td>
+    <td>3</td>
+    <td></td>
+    <td>TC 3.2</td>
+  </tr>
+  <tr>
+    <td>En användare ska kunna se sina bilder</td>
+    <td>K</td>
+    <td>N/A</td>
+    <td></td>
+    <td>TC 4.1-TC4.2</td>
+  </tr>
+  <tr>
+    <td>En användare ska kunna ändra status på bilden</td>
+    <td>K</td>
+    <td>N/A</td>
+    <td></td>
+    <td>TC 5.1</td>
+  </tr>
+  <tr>
+    <td>Koden skall följa code quality boken så mycket som möjligt</td>
+    <td>Ö</td>
+    <td>5</td>
+    <td></td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>Alla automatiserade tester skall gå igenom</td>
+    <td>Ö</td>
+    <td>4</td>
+    <td></td>
+    <td>Se "automatiserat test"</td>
+  </tr>
+</tbody></table>
+
 ## Backend Endpoints
 
 ### ImageSaver
