@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import ItemCard from "@/components/itemComponent/itemCard";
 import Cookies from "js-cookie";
 
-// TODO: Change the namings of mainly item.
+
 export default function Home() {
   const [items, setItems] = useState([]);
   const getItemsFromApi = async (username) => {
@@ -13,13 +13,13 @@ export default function Home() {
       const response = await fetch("http://localhost:3020/users/images", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Setting the correct content type for JSON
+          "Content-Type": "application/json", 
         },
-        body: JSON.stringify({ username }), // Send JSON payload
+        body: JSON.stringify({ username }), 
       });
       if (response.ok) {
-        const result = await response.json(); // Parse JSON response
-        setItems(result); // Update state with fetched items
+        const result = await response.json(); 
+        setItems(result);
       } else {
         console.error("Server error:", response.statusText);
       }

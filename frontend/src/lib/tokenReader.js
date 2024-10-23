@@ -2,7 +2,7 @@
 
 export function getNameFromToken(token) {
   try {
-                const parsedAuthStatus = JSON.parse(token); // Parse the JSON string
+                const parsedAuthStatus = JSON.parse(token);
                 if (parsedAuthStatus && parsedAuthStatus.username) {
                     const username = parsedAuthStatus.username;
                     return username

@@ -4,20 +4,20 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import Cookies from "js-cookie";
-import { getNameFromToken } from "@/lib/tokenReader"; // Updated import
+import { getNameFromToken } from "@/lib/tokenReader";
 
 export default function Header() {
     const pathname = usePathname();
     const displayPathname = pathname === '/' ? 'Home' : pathname.charAt(1).toUpperCase() + pathname.slice(2);
 
-    const [username, setUsername] = useState(null); // Store the username
+    const [username, setUsername] = useState(null);
 
     useEffect(() => {
         const authStatus = Cookies.get('auth-status');
         if (authStatus) {
             try {
-                const name = getNameFromToken(authStatus); // Use the regular function here
-                setUsername(name); // Set the username in the state
+                const name = getNameFromToken(authStatus);
+                setUsername(name);
             } catch (error) {
                 console.error('Error parsing auth-status cookie:', error);
             }
