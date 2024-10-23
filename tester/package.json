@@ -10,5 +10,10 @@
   "description": "",
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "fetch": "^1.1.0",
+    "fs": "^0.0.1-security",
+    "node-fetch": "^3.3.2"
   }
 }
