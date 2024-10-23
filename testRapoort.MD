@@ -212,8 +212,79 @@ A test and result will be shown
 
 ### Kravspecifikation
 
+<table><thead>
+  <tr>
+    <th>Krav/Önskemål</th>
+    <th>G/F</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td>En användare ska kunna skapa ett konto och logga in</td>
+    <td>G</td>
+  </tr>
+  <tr>
+    <td>En inloggad användare ska kunna ladda upp en bild, och se den</td>
+    <td>G</td>
+  </tr>
+  <tr>
+    <td>Enbart bilder ska kunna laddas&nbsp;&nbsp;upp</td>
+    <td>F</td>
+  </tr>
+  <tr>
+    <td>En användare ska kunna se sina bilder</td>
+    <td>G</td>
+  </tr>
+  <tr>
+    <td>Koden skall följa code quality boken så mycket som möjligt</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>Alla automatiserade tester skall gå igenom</td>
+    <td>G</td>
+  </tr>
+</tbody>
+</table>
+
 ### Test cases
 
+1. TC1.1 Let a user create a account
+    - Passed
+
+2. TC1.2 Dont let a user create a faulty account
+    - Passed
+
+3. TC2.1 Let a user login to a account
+    - Passed
+
+4. TC2.2 Dont let a user login to a account without correct initials
+    - Passed
+    - Comment: There is no notifier that it failed
+
+5. TC3.1 Allow a user to upload a image
+    - Passed
+
+6. TC3.2 Only allow a user to upload images
+    - Failed
+    - Videos doesnt crash the program however which is good
+
+7. TC4.1 Allow a user to see their images
+    - Passed
+
+8. TC4.2 Dont show images if a user isnt logged in
+    - Passed
+
+9. TC5.1 Allow a user change status of their images
+    - Passed
+
+## Discussion
+
+### Kravspecifikation
+
+Alla krav/önskemål har uppfyllts förutom kravet att endast bilder ska kunna laddas upp. Detta är på grund av att jag inte hade tid att implementera en validering för det,
+
+
 ### Automated test
+
+7/7 tests passed
 
 
