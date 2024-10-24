@@ -34,7 +34,7 @@ export default function Header() {
                     <p className="text-2xl font-bold cursor-pointer">{displayPathname}</p>
                 </Link>
             </nav>
-            <Link href={username ? "/account" : "/login"}>
+            <Link href={username ? "/account" : "/account"}>
                 <h1 className="text-2xl font-bold">{username ? `Welcome, ${username}` : "LOGIN"}</h1>
             </Link>
         </header>
